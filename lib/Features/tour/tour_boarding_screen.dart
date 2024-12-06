@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:travelapp_project/screens/hotel_boarding_screen.dart';
-import 'package:travelapp_project/screens/login_screen.dart';
+import 'package:travelapp_project/Features/Flight/flight_boarding.dart';
 
 class TourBoarding extends StatefulWidget {
   const TourBoarding({super.key});
@@ -25,10 +22,6 @@ class _TourBoardingState extends State<TourBoarding>
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
 
     _controller.forward();
-
-    Timer(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/home');
-    });
   }
 
   @override
@@ -97,7 +90,7 @@ class _TourBoardingState extends State<TourBoarding>
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) =>
-                          LoginScreen(), // Replace with your home screen widget
+                          FlightBoarding(), // Replace with your home screen widget
                     ),
                   );
                 },

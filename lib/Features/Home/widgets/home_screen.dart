@@ -1,11 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travelapp_project/screens/chat_screen.dart';
-import 'package:travelapp_project/screens/map_screen.dart';
-import 'package:travelapp_project/screens/my_bookings.dart';
-import 'package:travelapp_project/screens/user_screen.dart';
-import 'package:travelapp_project/widgets/flight.dart';
-import 'package:travelapp_project/widgets/hotel.dart';
-import 'package:travelapp_project/widgets/tour.dart';
+
+import 'package:travelapp_project/Features/Authentication/login_screen.dart';
+
+import 'package:travelapp_project/Features/hotel/hotel.dart';
+import 'package:travelapp_project/Features/Flight/flight.dart';
+import 'package:travelapp_project/Features/tour/tour.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   final PageController pageController = PageController(initialPage: 0);
   late TabController _tabController;
+  // ignore: unused_field
   int _selectedIndex = 0;
   int _selected = 0;
 
@@ -52,6 +53,34 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 254, 255),
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Logout'),
+                content: const Text('Are you sure you want to logout?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => LoginScreen()));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Logout successful')));
+                    },
+                    child: const Text('Yes'),
+                  ),
+                ],
+              ),
+            );
+          },
+          icon: const Icon(Icons.logout),
+        ),
         backgroundColor: const Color.fromARGB(255, 244, 254, 255),
         title: const Text(
           'Explore',
@@ -60,21 +89,21 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       body: Stack(
         children: [
-          PageView(
-            controller: pageController,
-            onPageChanged: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            children: const <Widget>[
-              Center(child: HomeScreen()),
-              Center(child: ChatScreen()),
-              Center(child: MapScreen()),
-              Center(child: MyBookings()),
-              Center(child: UserScreen()),
-            ],
-          ),
+          // PageView(
+          //   controller: pageController,
+          //   onPageChanged: (index) {
+          //     setState(() {
+          //       _selectedIndex = index;
+          //     });
+          //   },
+          //   children: const <Widget>[
+          //     Center(child: HomeScreen()),
+          //     Center(child: ChatScreen()),
+          //     Center(child: MapScreen()),
+          //     Center(child: MyBookings()),
+          //     Center(child: UserScreen()),
+          //   ],
+          // ),
           Column(
             children: [
               Row(
@@ -116,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen>
                           borderRadius: BorderRadius.circular(22),
                         ),
                       ),
-                      child: const Text('Flight'),
+                      child: const Text('Hotel'),
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -134,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen>
                           borderRadius: BorderRadius.circular(22),
                         ),
                       ),
-                      child: const Text('Hotel'),
+                      child: const Text('Flight'),
                     ),
                   ),
                 ],
@@ -142,10 +171,10 @@ class _HomeScreenState extends State<HomeScreen>
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
-                  children: const [
-                    TourScreen(),
-                    Flight(),
+                  children: [
+                    const TourScreen(),
                     Hotel(),
+                    const FlightPage(),
                   ],
                 ),
               ),
@@ -153,36 +182,36 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 25),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat, size: 25),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined, size: 25),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt_outlined, size: 25),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, size: 25),
-            label: '',
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.white,
+      //   type: BottomNavigationBarType.fixed,
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      //   selectedItemColor: Colors.blue,
+      //   unselectedItemColor: Colors.grey,
+      //   items: const [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home, size: 25),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.chat, size: 25),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.map_outlined, size: 25),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.list_alt_outlined, size: 25),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person, size: 25),
+      //       label: '',
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

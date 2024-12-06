@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:travelapp_project/screens/login_screen.dart';
-import 'package:travelapp_project/screens/tour_boarding_screen.dart';
+import 'package:travelapp_project/Features/hotel/hotel_boarding_screen.dart';
 
 class FlightBoarding extends StatefulWidget {
   const FlightBoarding({super.key});
@@ -122,7 +121,7 @@ class _FlightBoardingState extends State<FlightBoarding>
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) =>
-                            TourBoarding(), // Replace with your home screen widget
+                            HotelBoarding(), // Replace with your home screen widget
                       ),
                     );
                     // Add login functionality here

@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:travelapp_project/screens/flight_boarding_screen.dart';
+
+import 'package:travelapp_project/Features/Authentication/login_screen.dart';
 
 class HotelBoarding extends StatefulWidget {
   const HotelBoarding({super.key});
@@ -23,10 +23,6 @@ class _HotelBoardingState extends State<HotelBoarding>
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
 
     _controller.forward();
-
-    Timer(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/home');
-    });
   }
 
   @override
@@ -94,7 +90,7 @@ class _HotelBoardingState extends State<HotelBoarding>
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => FlightBoarding(),
+                      builder: (context) => LoginScreen(),
                     ),
                   );
                 },
