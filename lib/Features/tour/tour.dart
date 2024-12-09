@@ -136,8 +136,8 @@ class _TourScreenState extends State<TourScreen> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(
                                           20), // This clips the image to match the border radius
-                                      child: Image.file(
-                                        File(imagePath),
+                                      child: Image.network(
+                                        imagePath,
                                         fit: BoxFit.cover,
                                         errorBuilder:
                                             (context, error, stackTrace) =>
