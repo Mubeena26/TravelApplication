@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travelapp_project/Features/Home/widgets/home_screen.dart';
+import 'package:travelapp_project/Features/bottom_nav.dart';
 import 'package:travelapp_project/Features/tour/tour_boarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -41,18 +43,51 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
-  void _checkUserStatus() {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      // User is signed in, navigate to HomeScreen
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    } else {
-      // No user is signed in, navigate to TourBoarding screen
+  void _checkUserStatus() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // Fetch bookingId and navigate to BottomNav
+        final String bookingId = await _getBookingIdForUser(user.uid);
+        if (!mounted) return; // Ensure the widget is still in the widget tree
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => BottomNav(bookingId: bookingId),
+          ),
+        );
+      } else {
+        // Navigate to TourBoarding screen
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => TourBoarding()),
+        );
+      }
+    } catch (e) {
+      // Handle errors (e.g., log them or show an error message)
+      debugPrint('Error in _checkUserStatus: $e');
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => TourBoarding()),
       );
+    }
+  }
+
+  Future<String> _getBookingIdForUser(String userId) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      if (snapshot.exists) {
+        return snapshot['bookingId'] ?? '';
+      } else {
+        return ''; // Return a default value if bookingId is not available
+      }
+    } catch (e) {
+      debugPrint('Failed to fetch bookingId: $e');
+      return ''; // Return a default value on error
     }
   }
 

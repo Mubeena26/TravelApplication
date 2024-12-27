@@ -13,19 +13,35 @@ class _SearchState extends State<Search> {
   var searchname = '';
   double? minPrice;
   double? maxPrice;
-  DateTime? selectedDate;
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
 
-  // Function to open date picker
-  Future<void> _pickDate() async {
+  // Function to open start date picker
+  Future<void> _pickStartDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    if (pickedDate != null && pickedDate != selectedDate) {
+    if (pickedDate != null && pickedDate != selectedStartDate) {
       setState(() {
-        selectedDate = pickedDate;
+        selectedStartDate = pickedDate;
+      });
+    }
+  }
+
+  // Function to open end date picker
+  Future<void> _pickEndDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null && pickedDate != selectedEndDate) {
+      setState(() {
+        selectedEndDate = pickedDate;
       });
     }
   }
@@ -155,20 +171,46 @@ class _SearchState extends State<Search> {
                 ),
                 const SizedBox(height: 10),
 
-                // Date Picker
+                // Start Date Picker
                 Row(
                   children: [
-                    const Text('Select Date: '),
+                    const Text('Start Date: '),
                     ElevatedButton(
-                      onPressed: _pickDate,
+                      onPressed: _pickStartDate,
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
                             const Color.fromARGB(255, 41, 182, 246),
                       ),
                       child: Text(
-                        selectedDate == null
-                            ? 'Choose Date'
-                            : selectedDate!.toLocal().toString().split(' ')[0],
+                        selectedStartDate == null
+                            ? 'Start Date'
+                            : selectedStartDate!
+                                .toLocal()
+                                .toString()
+                                .split(' ')[0],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                // End Date Picker
+                Row(
+                  children: [
+                    const Text('End Date: '),
+                    ElevatedButton(
+                      onPressed: _pickEndDate,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 41, 182, 246),
+                      ),
+                      child: Text(
+                        selectedEndDate == null
+                            ? 'End Date'
+                            : selectedEndDate!
+                                .toLocal()
+                                .toString()
+                                .split(' ')[0],
                       ),
                     ),
                   ],
@@ -215,9 +257,13 @@ class _SearchState extends State<Search> {
       query = query.where('price', isLessThanOrEqualTo: maxPrice);
     }
 
-    // Apply date filter
-    if (selectedDate != null) {
-      query = query.where('date', isEqualTo: selectedDate);
+    // Apply date filter for startDate and endDate
+    if (selectedStartDate != null && selectedEndDate != null) {
+      query = query
+          .where('startDate',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(selectedStartDate!))
+          .where('endDate',
+              isLessThanOrEqualTo: Timestamp.fromDate(selectedEndDate!));
     }
 
     return query.snapshots();

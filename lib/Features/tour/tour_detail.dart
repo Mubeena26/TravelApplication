@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:travelapp_project/Features/tour/booking_popup.dart';
 
 class TourDetail extends StatefulWidget {
@@ -11,12 +12,15 @@ class TourDetail extends StatefulWidget {
 }
 
 class _TourDetailState extends State<TourDetail> {
-  bool _isExpanded = false; // For toggling the "Read More" section
-
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> tourData = widget.tourData;
-    final String imagePath = tourData['imagePath'] ?? '';
+    List<dynamic> imageUrls = tourData['imagePath'] ?? [];
+
+    if (imageUrls.isEmpty) {
+      return const Center(child: Text('Image path not available.'));
+    }
+
     final String packageName = tourData['packageName'] ?? 'Unknown Package';
     final String destination = tourData['destination'] ?? 'Unknown Destination';
     final double price = (tourData['price'] ?? 0).toDouble();
@@ -26,8 +30,16 @@ class _TourDetailState extends State<TourDetail> {
     final String endDate = tourData['endDate'] ?? 'Not available';
     final String departureTime = tourData['departureTime'] ?? 'Not available';
     final String arrivalTime = tourData['arrivalTime'] ?? 'Not available';
-    final double adultPrice = tourData['adultPrice'] ?? 0.0;
-    final double childPrice = tourData['childPrice'] ?? 0.0;
+
+    final String adultPriceString =
+        tourData['adultPer'] ?? '0'; // Kept as String
+    final String childPriceString =
+        tourData['childPer'] ?? '0'; // Kept as String
+
+    // Convert the string values to double
+    final double adultPrice = double.tryParse(adultPriceString) ?? 0.0;
+    final double childPrice = double.tryParse(childPriceString) ?? 0.0;
+
     final List<String> activities =
         List<String>.from(tourData['activities'] ?? []);
     final String accommodationType =
@@ -44,34 +56,49 @@ class _TourDetailState extends State<TourDetail> {
         tourData['cancellationPolicy'] ?? 'No cancellation policy available';
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 254, 255),
+      backgroundColor: const Color.fromARGB(255, 66, 88, 132),
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.only(left: 55),
           child: Text('Tour Detail'),
         ),
-        backgroundColor: const Color.fromARGB(255, 244, 254, 255),
+        backgroundColor: const Color.fromARGB(255, 66, 88, 132),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Image Section
+              // Carousel Image Section
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Container(
-                  height: 340,
-                  width: 320,
-                  decoration: BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(color: Colors.white, blurRadius: 4),
-                    ],
-                    borderRadius: BorderRadius.circular(25),
-                    image: DecorationImage(
-                      image: NetworkImage(imagePath),
-                      fit: BoxFit.cover,
-                    ),
+                child: CarouselSlider.builder(
+                  itemCount: imageUrls.length,
+                  itemBuilder: (context, index, realIndex) {
+                    final imageUrl = imageUrls[index];
+                    return Container(
+                      height: 340,
+                      width: 320,
+                      decoration: BoxDecoration(
+                        boxShadow: const [
+                          BoxShadow(color: Colors.white, blurRadius: 4),
+                        ],
+                        borderRadius: BorderRadius.circular(25),
+                        image: DecorationImage(
+                          image: NetworkImage(imageUrl),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                  options: CarouselOptions(
+                    height: 340,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    viewportFraction: 0.8,
+                    aspectRatio: 16 / 9,
+                    enableInfiniteScroll: true,
+                    scrollPhysics: BouncingScrollPhysics(),
                   ),
                 ),
               ),
@@ -84,20 +111,21 @@ class _TourDetailState extends State<TourDetail> {
 
               // All Detailed Info in One Card with Compact Row Layout
               _buildAllDetailsCard(
-                  description,
-                  startDate,
-                  endDate,
-                  departureTime,
-                  arrivalTime,
-                  adultPrice,
-                  childPrice,
-                  activities,
-                  accommodationType,
-                  transportation,
-                  inclusions,
-                  exclusions,
-                  termsConditions,
-                  cancellationPolicy),
+                description,
+                startDate,
+                endDate,
+                departureTime,
+                arrivalTime,
+                adultPrice,
+                childPrice,
+                activities,
+                accommodationType,
+                transportation,
+                inclusions,
+                exclusions,
+                termsConditions,
+                cancellationPolicy,
+              ),
 
               const SizedBox(height: 20),
 
@@ -220,62 +248,44 @@ class _TourDetailState extends State<TourDetail> {
     return Card(
       color: Colors.white,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      elevation: 5,
+      elevation: 10,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(25.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailText('Description:\n', '$description '),
-            if (_isExpanded) ...[
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     _buildDetailText('Start:\n', startDate),
-              //     _buildDetailText('End:\n', endDate),
-              //   ],
-              // ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildDetailText(
-                      'Adult Price:\n', '\$${adultPrice.toStringAsFixed(2)}'),
-                  _buildDetailText(
-                      'Child Price:\n', '\$${childPrice.toStringAsFixed(2)}'),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildDetailText('Departure:\n', departureTime),
-                  _buildDetailText('Arrival:\n', arrivalTime),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildDetailText('Accommodation:\n', accommodationType),
-                  _buildDetailText('Transportation:\n', transportation),
-                ],
-              ),
-              _buildDetailText('Start:\n', startDate),
-              _buildDetailText('End:\n', endDate),
-              _buildDetailText('Inclusions:', inclusions.join(', ')),
-              _buildDetailText('Exclusions:', exclusions.join(', ')),
-              _buildDetailText('Terms and Conditions:', termsConditions),
-              _buildDetailText('Cancellation Policy:', cancellationPolicy),
-            ],
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _isExpanded = !_isExpanded;
-                });
-              },
-              child: Text(_isExpanded ? 'Show Less' : 'Read More'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildDetailText(
+                    'Adult Price\n', '\$${adultPrice.toStringAsFixed(2)}'),
+                _buildDetailText(
+                    'Child Price\n', '\$${childPrice.toStringAsFixed(2)}'),
+              ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildDetailText('Departure\n', departureTime),
+                _buildDetailText('Arrival\n', arrivalTime),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildDetailText('Accommodation\n', accommodationType),
+                _buildDetailText('Transportation\n', transportation),
+              ],
+            ),
+            _buildDetailText('Start\n', startDate),
+            _buildDetailText('End\n', endDate),
+            _buildDetailText('Inclusions\n', inclusions.join(', ')),
+            _buildDetailText('Exclusions\n', exclusions.join(', ')),
+            _buildDetailText('Terms and Conditions\n', termsConditions),
+            _buildDetailText('Cancellation Policy\n', cancellationPolicy),
           ],
         ),
       ),
@@ -283,22 +293,29 @@ class _TourDetailState extends State<TourDetail> {
   }
 
   // Helper function to create text sections within cards
-  // Helper function to create text sections within cards
   Widget _buildDetailText(String title, String content) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Text(
-        '$title $content',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: title == 'Description:\n' ||
-                  title == 'Inclusions:' ||
-                  title == 'Exclusions:' ||
-                  title == 'Terms and Conditions:' ||
-                  title == 'Cancellation Policy:'
-              ? FontWeight.bold
-              : FontWeight.normal, // Make title bold
-          color: const Color.fromARGB(255, 66, 88, 132),
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: const Color.fromARGB(255, 66, 88, 132),
+              ),
+            ),
+            TextSpan(
+              text: content,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: Colors.orangeAccent,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:travelapp_project/Features/Authentication/login_screen.dart';
+import 'package:travelapp_project/Features/bottom_nav.dart';
 
 import 'package:travelapp_project/Features/hotel/hotel.dart';
 import 'package:travelapp_project/Features/Flight/flight.dart';
@@ -89,21 +90,6 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       body: Stack(
         children: [
-          // PageView(
-          //   controller: pageController,
-          //   onPageChanged: (index) {
-          //     setState(() {
-          //       _selectedIndex = index;
-          //     });
-          //   },
-          //   children: const <Widget>[
-          //     Center(child: HomeScreen()),
-          //     Center(child: ChatScreen()),
-          //     Center(child: MapScreen()),
-          //     Center(child: MyBookings()),
-          //     Center(child: UserScreen()),
-          //   ],
-          // ),
           Column(
             children: [
               Row(
@@ -182,7 +168,10 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ],
       ),
-      // bottomNavigationBar: BottomNavigationBar(
+    );
+  }
+}
+  // bottomNavigationBar: BottomNavigationBar(
       //   backgroundColor: Colors.white,
       //   type: BottomNavigationBarType.fixed,
       //   currentIndex: _selectedIndex,
@@ -212,6 +201,19 @@ class _HomeScreenState extends State<HomeScreen>
       //     ),
       //   ],
       // ),
-    );
-  }
-}
+
+       // PageView(
+          //   controller: pageController,
+          //   onPageChanged: (index) {
+          //     setState(() {
+          //       _selectedIndex = index;
+          //     });
+          //   },
+          //   children: const <Widget>[
+          //     Center(child: HomeScreen()),
+          //     Center(child: ChatScreen()),
+          //     Center(child: MapScreen()),
+          //     Center(child: MyBookings()),
+          //     Center(child: UserScreen()),
+          //   ],
+          // ),
