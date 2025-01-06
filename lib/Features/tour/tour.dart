@@ -303,7 +303,8 @@ class _TourScreenState extends State<TourScreen> {
                                           ),
                                         ),
                                         subtitle: Text(
-                                          data['dates'] ?? 'Unknown Dates',
+                                          data['destination'] ??
+                                              'Unknown Dates',
                                           style: const TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.normal,

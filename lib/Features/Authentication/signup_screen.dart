@@ -164,6 +164,7 @@ class _SignUpState extends State<SignUp> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _signUp();
+                    userSetup(_nameController.text, _emailController.text);
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -207,6 +208,7 @@ class _SignUpState extends State<SignUp> {
             duration: Duration(seconds: 2),
           ),
         );
+        userSetup(_nameController.text, _emailController.text);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );

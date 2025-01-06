@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travelapp_project/Features/Authentication/login_screen.dart';
+import 'package:travelapp_project/Features/settings/about.dart';
+import 'package:travelapp_project/Features/settings/privacy.dart';
+import 'package:travelapp_project/Features/settings/support.dart';
+import 'package:travelapp_project/Features/utils/utils_colors.dart';
 
+// ignore: must_be_immutable
 class UserScreen extends StatelessWidget {
   TextStyle blackText = const TextStyle(
     color: Colors.black,
@@ -31,7 +37,7 @@ class UserScreen extends StatelessWidget {
     final User? user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 232, 240, 253),
       body: Theme(
         data: Theme.of(context).copyWith(
           brightness: Brightness.dark,
@@ -89,60 +95,89 @@ class UserScreen extends StatelessWidget {
                 const SizedBox(height: 20.0),
                 ListTile(
                   title: const Text(
-                    "Languages",
+                    "About us",
                   ),
-                  subtitle: Text(
-                    "English US",
-                    style: greyTExt,
-                  ),
+                  // subtitle: Text(
+                  //   "English US",
+                  //   style: greyTExt,
+                  // ),
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
                     color: Colors.grey.shade400,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => AboutUs(),
+                    ));
+                  },
                 ),
                 ListTile(
                   title: const Text(
-                    "Profile Settings",
+                    "Privacy policy",
                   ),
-                  subtitle: Text(
-                    user?.displayName ?? "No Name",
-                    style: greyTExt,
-                  ),
+                  // subtitle: Text(
+                  //   user?.displayName ?? "No Name",
+                  //   style: greyTExt,
+                  // ),
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
                     color: Colors.grey.shade400,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PrivacyPolicy(),
+                    ));
+                  },
                 ),
-                SwitchListTile(
+                ListTile(
                   title: const Text(
-                    "Email Notifications",
+                    "Support",
                   ),
-                  subtitle: Text(
-                    "On",
-                    style: greyTExt,
+                  // subtitle: Text(
+                  //   user?.displayName ?? "No Name",
+                  //   style: greyTExt,
+                  // ),
+                  trailing: Icon(
+                    Icons.keyboard_arrow_right,
+                    color: Colors.grey.shade400,
                   ),
-                  value: true,
-                  onChanged: (val) {},
-                ),
-                SwitchListTile(
-                  title: const Text(
-                    "Push Notifications",
-                  ),
-                  subtitle: Text(
-                    "Off",
-                    style: greyTExt,
-                  ),
-                  value: false,
-                  onChanged: (val) {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Support(),
+                    ));
+                  },
                 ),
                 ListTile(
                   title: const Text(
                     "Logout",
                   ),
                   onTap: () async {
-                    await FirebaseAuth.instance.signOut();
+                    // await FirebaseAuth.instance.signOut();
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Logout'),
+                        content: const Text('Are you sure you want to logout?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('No'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              FirebaseAuth.instance.signOut();
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Logout successful')));
+                            },
+                            child: const Text('Yes'),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                 ),
               ],

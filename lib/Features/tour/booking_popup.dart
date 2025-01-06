@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:travelapp_project/Features/Home/widgets/home_screen.dart';
-import 'package:travelapp_project/Features/bottom_nav.dart';
+import 'package:travelapp_project/Features/screens/bottom_nav.dart';
 import 'package:travelapp_project/Features/tour/bloc/booking_bloc.dart';
 import 'package:travelapp_project/Features/tour/bloc/booking_event.dart';
 import 'package:travelapp_project/Features/tour/bloc/booking_state.dart';
@@ -38,10 +39,32 @@ class _BookingScreenState extends State<BookingScreen> {
     return (adultCount * adultPrice) + (childCount * childPrice);
   }
 
+  void _getUserDetails() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        name =
+            user.displayName ?? 'Guest'; // If displayName is null, use 'Guest'
+        email = user.email ??
+            'Not available'; // If email is null, use 'Not available'
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    _getUserDetails();
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final User? user = FirebaseAuth.instance.currentUser;
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    final String packageName =
+        widget.tourData['packageName'] ?? 'Not specified';
     return BlocProvider(
       create: (_) => BookingBloc(),
       child: Scaffold(
@@ -73,34 +96,41 @@ class _BookingScreenState extends State<BookingScreen> {
                             child: Column(
                               children: [
                                 TextFormField(
-                                  decoration:
-                                      const InputDecoration(labelText: 'Name'),
-                                  validator: (value) =>
-                                      value == null || value.isEmpty
-                                          ? 'Enter your name'
-                                          : null,
-                                  onChanged: (value) =>
-                                      setState(() => name = value),
+                                  decoration: InputDecoration(
+                                    labelText: 'Name',
+                                    labelStyle: TextStyle(
+                                      fontWeight:
+                                          FontWeight.bold, // Bold label text
+                                    ),
+                                    hintText:
+                                        name.isNotEmpty ? name : "No Name",
+                                    hintStyle: TextStyle(
+                                      fontWeight:
+                                          FontWeight.bold, // Bold hint text
+                                    ),
+                                  ),
+                                  initialValue: name,
+                                  enabled: false, // Prevent editing the name
                                 ),
                                 const SizedBox(height: 10),
                                 TextFormField(
-                                  decoration:
-                                      const InputDecoration(labelText: 'Email'),
-                                  validator: (value) =>
-                                      value == null || !value.contains('@')
-                                          ? 'Enter a valid email'
-                                          : null,
-                                  onChanged: (value) =>
-                                      setState(() => email = value),
+                                  decoration: InputDecoration(
+                                    labelText: 'Email',
+                                    hintText:
+                                        email.isNotEmpty ? email : "No Email",
+                                  ),
+                                  initialValue: email,
+                                  enabled: false, // Prevent editing the email
                                 ),
                                 const SizedBox(height: 10),
                                 TextFormField(
                                   decoration: const InputDecoration(
                                       labelText: 'Phone Number'),
-                                  validator: (value) =>
-                                      value == null || value.isEmpty
-                                          ? 'Enter your phone number'
-                                          : null,
+                                  validator: (value) => value == null ||
+                                          value.isEmpty ||
+                                          value.contains(' ')
+                                      ? 'Enter your phone number'
+                                      : null,
                                   onChanged: (value) =>
                                       setState(() => phoneNumber = value),
                                 ),
@@ -113,7 +143,8 @@ class _BookingScreenState extends State<BookingScreen> {
                                             labelText: 'Adults'),
                                         keyboardType: TextInputType.number,
                                         validator: (value) => value == null ||
-                                                int.tryParse(value) == null
+                                                int.tryParse(value) == null ||
+                                                value.contains(' ')
                                             ? 'Enter a valid number'
                                             : null,
                                         onChanged: (value) => setState(() =>
@@ -128,7 +159,8 @@ class _BookingScreenState extends State<BookingScreen> {
                                             labelText: 'Children'),
                                         keyboardType: TextInputType.number,
                                         validator: (value) => value == null ||
-                                                int.tryParse(value) == null
+                                                int.tryParse(value) == null ||
+                                                value.contains(' ')
                                             ? 'Enter a valid number'
                                             : null,
                                         onChanged: (value) => setState(() =>
@@ -240,6 +272,25 @@ class _BookingScreenState extends State<BookingScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
+                                    'PackageName:',
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                  Text(
+                                    packageName,
+                                    style: const TextStyle(
+                                        fontSize: 16, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
                                     'Adults:',
                                     style: const TextStyle(
                                         fontSize: 16,
@@ -330,25 +381,25 @@ class _BookingScreenState extends State<BookingScreen> {
                   ),
                 ),
               ),
-              BlocListener<BookingBloc, BookingState>(
-                listener: (context, state) {
-                  if (state is BookingLoadingState) {
-                    // Show loading indicator
-                  }
-                  if (state is BookingSuccessState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Booking saved successfully!')),
-                    );
-                  }
-                  if (state is BookingErrorState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.errorMessage)),
-                    );
-                  }
-                },
-                child: const SizedBox(),
-              ),
+              // BlocListener<BookingBloc, BookingState>(
+              //   listener: (context, state) {
+              //     if (state is BookingLoadingState) {
+              //       // Show loading indicator
+              //     }
+              //     if (state is BookingSuccessState) {
+              //       ScaffoldMessenger.of(context).showSnackBar(
+              //         const SnackBar(
+              //             content: Text('Booking saved successfully!')),
+              //       );
+              //     }
+              //     if (state is BookingErrorState) {
+              //       ScaffoldMessenger.of(context).showSnackBar(
+              //         SnackBar(content: Text(state.errorMessage)),
+              //       );
+              //     }
+              //   },
+              //   child: const SizedBox(),
+              // ),
             ],
           ),
         ),
@@ -356,10 +407,22 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
+  bool _isPaymentProcessed = false;
+
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    if (_isPaymentProcessed) return; // Prevent multiple invocations
+    _isPaymentProcessed = true;
+
     try {
+      var userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) {
+        // Handle case where user is not logged in
+        return;
+      }
+
       var bookingRef =
           await FirebaseFirestore.instance.collection('bookings').add({
+        'userId': userId,
         'name': name,
         'email': email,
         'phoneNumber': phoneNumber,
@@ -367,10 +430,11 @@ class _BookingScreenState extends State<BookingScreen> {
         'childCount': childCount,
         'totalPrice': _calculateTotalPrice(),
         'paymentId': response.paymentId,
+        'packageName': widget.tourData['packageName'] ?? 'Not specified',
+        'imagePath': widget.tourData['imagePath'] ?? 'Not specified',
       });
 
       String bookingId = bookingRef.id;
-      // Check if bookingId is valid before navigating
       if (bookingId.isNotEmpty) {
         Navigator.pushReplacement(
           context,
@@ -379,7 +443,6 @@ class _BookingScreenState extends State<BookingScreen> {
           ),
         );
       } else {
-        // Handle empty bookingId (fallback case)
         Fluttertoast.showToast(msg: "Booking failed, please try again.");
       }
     } catch (e) {

@@ -14,7 +14,9 @@ class Message {
       required this.receiverId,
       required this.message,
       required this.timestamp,
-      required this.isDeleted});
+      required this.isDeleted,
+      required String senderName,
+      required String senderEmail});
 
   Map<String, dynamic> toMap() {
     return {

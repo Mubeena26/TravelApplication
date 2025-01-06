@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travelapp_project/Features/hotel/hotel_detail.dart';
+import 'package:travelapp_project/Features/utils/utils_colors.dart';
 
 class FlightItem extends StatelessWidget {
   final dynamic flight;
@@ -14,7 +15,7 @@ class FlightItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: whitecolor,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
@@ -50,13 +51,12 @@ class FlightItem extends StatelessWidget {
                   const SizedBox(height: 4.0),
                   Text(
                     'Duration: ${flight['total_duration']} mins',
-                    style: const TextStyle(fontSize: 14.0, color: Colors.grey),
+                    style: const TextStyle(fontSize: 14.0, color: grey),
                   ),
                   const SizedBox(height: 4.0),
                   Text(
                     'Price: \$${priceInInr.toStringAsFixed(2)}',
-                    style:
-                        const TextStyle(fontSize: 14.0, color: Colors.orange),
+                    style: const TextStyle(fontSize: 14.0, color: orangecolor),
                   ),
                 ],
               ),

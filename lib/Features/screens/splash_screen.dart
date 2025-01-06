@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travelapp_project/Features/Home/widgets/home_screen.dart';
-import 'package:travelapp_project/Features/bottom_nav.dart';
+
+import 'package:travelapp_project/Features/screens/bottom_nav.dart';
 import 'package:travelapp_project/Features/tour/tour_boarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {

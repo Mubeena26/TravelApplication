@@ -1,50 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:travelapp_project/Features/tour/tour_detail.dart';
 
-class Search extends StatefulWidget {
-  const Search({super.key});
+// Controller for Search State
+class SearchController extends GetxController {
+  var searchname = ''.obs;
+  var minPrice = Rxn<double>();
+  var maxPrice = Rxn<double>();
+  var selectedStartDate = Rxn<DateTime>();
+  var selectedEndDate = Rxn<DateTime>();
 
-  @override
-  State<Search> createState() => _SearchState();
+  Stream<QuerySnapshot> getFilteredStream() {
+    Query query = FirebaseFirestore.instance.collection('tours');
+
+    // Apply search filter
+    if (searchname.isNotEmpty) {
+      query = query
+          .where('packageName', isGreaterThanOrEqualTo: searchname.value)
+          .where('packageName', isLessThan: searchname.value + '\uf8ff');
+    }
+
+    // Apply price filters
+    if (minPrice.value != null) {
+      query = query.where('price', isGreaterThanOrEqualTo: minPrice.value);
+    }
+    if (maxPrice.value != null) {
+      query = query.where('price', isLessThanOrEqualTo: maxPrice.value);
+    }
+
+    // Apply date filters
+    if (selectedStartDate.value != null && selectedEndDate.value != null) {
+      query = query
+          .where('startDate',
+              isGreaterThanOrEqualTo:
+                  Timestamp.fromDate(selectedStartDate.value!))
+          .where('endDate',
+              isLessThanOrEqualTo: Timestamp.fromDate(selectedEndDate.value!));
+    }
+
+    return query.snapshots();
+  }
 }
 
-class _SearchState extends State<Search> {
-  var searchname = '';
-  double? minPrice;
-  double? maxPrice;
-  DateTime? selectedStartDate;
-  DateTime? selectedEndDate;
-
-  // Function to open start date picker
-  Future<void> _pickStartDate() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null && pickedDate != selectedStartDate) {
-      setState(() {
-        selectedStartDate = pickedDate;
-      });
-    }
-  }
-
-  // Function to open end date picker
-  Future<void> _pickEndDate() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null && pickedDate != selectedEndDate) {
-      setState(() {
-        selectedEndDate = pickedDate;
-      });
-    }
-  }
+class Search extends StatelessWidget {
+  final SearchController controller = Get.put(SearchController());
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +60,8 @@ class _SearchState extends State<Search> {
                 children: [
                   Expanded(
                     child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          searchname = value.trim();
-                        });
-                      },
+                      onChanged: (value) =>
+                          controller.searchname.value = value.trim(),
                       decoration: InputDecoration(
                         hintText: "Search Tour Packages",
                         hintStyle: const TextStyle(color: Colors.grey),
@@ -81,7 +78,7 @@ class _SearchState extends State<Search> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.filter_list, color: Colors.blue),
-                    onPressed: _showFiltersDialog,
+                    onPressed: () => _showFiltersDialog(context, controller),
                   ),
                 ],
               ),
@@ -89,42 +86,47 @@ class _SearchState extends State<Search> {
 
               // Results Section
               Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: _getFilteredStream(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (snapshot.hasError) {
-                      return const Center(child: Text('Something went wrong'));
-                    }
+                child: Obx(() {
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: controller.getFilteredStream(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError) {
+                        return const Center(
+                            child: Text('Something went wrong'));
+                      }
 
-                    final searchResults = snapshot.data?.docs ?? [];
-                    if (searchResults.isEmpty) {
-                      return const Center(child: Text('No results found.'));
-                    }
+                      final searchResults = snapshot.data?.docs ?? [];
+                      if (searchResults.isEmpty) {
+                        return const Center(child: Text('No results found.'));
+                      }
 
-                    return ListView.builder(
-                      itemCount: searchResults.length,
-                      itemBuilder: (context, index) {
-                        final data =
-                            searchResults[index].data() as Map<String, dynamic>;
-                        return ListTile(
-                          title: Text(data['packageName'] ?? 'Unknown Package'),
-                          subtitle: Text(
-                              data['destination'] ?? 'Unknown Destination'),
-                          leading:
-                              const Icon(Icons.location_on, color: Colors.blue),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => TourDetail(tourData: data),
-                            ));
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
+                      return ListView.builder(
+                        itemCount: searchResults.length,
+                        itemBuilder: (context, index) {
+                          final data = searchResults[index].data()
+                              as Map<String, dynamic>;
+                          return ListTile(
+                            title:
+                                Text(data['packageName'] ?? 'Unknown Package'),
+                            subtitle: Text(
+                                data['destination'] ?? 'Unknown Destination'),
+                            leading: const Icon(Icons.location_on,
+                                color: Colors.blue),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    TourDetail(tourData: data),
+                              ));
+                            },
+                          );
+                        },
+                      );
+                    },
+                  );
+                }),
               ),
             ],
           ),
@@ -133,8 +135,7 @@ class _SearchState extends State<Search> {
     );
   }
 
-  // Function to show filter dialog
-  void _showFiltersDialog() {
+  void _showFiltersDialog(BuildContext context, SearchController controller) {
     showDialog(
       context: context,
       builder: (context) {
@@ -146,11 +147,8 @@ class _SearchState extends State<Search> {
                 // Price Filters
                 TextField(
                   keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      minPrice = double.tryParse(value);
-                    });
-                  },
+                  onChanged: (value) =>
+                      controller.minPrice.value = double.tryParse(value),
                   decoration: const InputDecoration(
                     labelText: 'Min Price',
                     hintText: 'Enter min price',
@@ -159,11 +157,8 @@ class _SearchState extends State<Search> {
                 const SizedBox(height: 10),
                 TextField(
                   keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      maxPrice = double.tryParse(value);
-                    });
-                  },
+                  onChanged: (value) =>
+                      controller.maxPrice.value = double.tryParse(value),
                   decoration: const InputDecoration(
                     labelText: 'Max Price',
                     hintText: 'Enter max price',
@@ -176,19 +171,22 @@ class _SearchState extends State<Search> {
                   children: [
                     const Text('Start Date: '),
                     ElevatedButton(
-                      onPressed: _pickStartDate,
+                      onPressed: () =>
+                          _pickDate(context, controller.selectedStartDate),
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
                             const Color.fromARGB(255, 41, 182, 246),
                       ),
-                      child: Text(
-                        selectedStartDate == null
-                            ? 'Start Date'
-                            : selectedStartDate!
-                                .toLocal()
-                                .toString()
-                                .split(' ')[0],
-                      ),
+                      child: Obx(() {
+                        return Text(
+                          controller.selectedStartDate.value == null
+                              ? 'Start Date'
+                              : controller.selectedStartDate.value!
+                                  .toLocal()
+                                  .toString()
+                                  .split(' ')[0],
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -199,19 +197,22 @@ class _SearchState extends State<Search> {
                   children: [
                     const Text('End Date: '),
                     ElevatedButton(
-                      onPressed: _pickEndDate,
+                      onPressed: () =>
+                          _pickDate(context, controller.selectedEndDate),
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
                             const Color.fromARGB(255, 41, 182, 246),
                       ),
-                      child: Text(
-                        selectedEndDate == null
-                            ? 'End Date'
-                            : selectedEndDate!
-                                .toLocal()
-                                .toString()
-                                .split(' ')[0],
-                      ),
+                      child: Obx(() {
+                        return Text(
+                          controller.selectedEndDate.value == null
+                              ? 'End Date'
+                              : controller.selectedEndDate.value!
+                                  .toLocal()
+                                  .toString()
+                                  .split(' ')[0],
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -220,16 +221,11 @@ class _SearchState extends State<Search> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                setState(() {});
-              },
+              onPressed: () => Navigator.pop(context),
               child: const Text('Apply Filters'),
             ),
           ],
@@ -238,34 +234,16 @@ class _SearchState extends State<Search> {
     );
   }
 
-  // Get filtered stream based on search name, price, and date
-  Stream<QuerySnapshot> _getFilteredStream() {
-    Query query = FirebaseFirestore.instance.collection('tours');
-
-    // Apply search filter
-    if (searchname.isNotEmpty) {
-      query = query
-          .where('packageName', isGreaterThanOrEqualTo: searchname)
-          .where('packageName', isLessThan: searchname + '\uf8ff');
+  Future<void> _pickDate(
+      BuildContext context, Rxn<DateTime> selectedDate) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      selectedDate.value = pickedDate;
     }
-
-    // Apply price filters
-    if (minPrice != null) {
-      query = query.where('price', isGreaterThanOrEqualTo: minPrice);
-    }
-    if (maxPrice != null) {
-      query = query.where('price', isLessThanOrEqualTo: maxPrice);
-    }
-
-    // Apply date filter for startDate and endDate
-    if (selectedStartDate != null && selectedEndDate != null) {
-      query = query
-          .where('startDate',
-              isGreaterThanOrEqualTo: Timestamp.fromDate(selectedStartDate!))
-          .where('endDate',
-              isLessThanOrEqualTo: Timestamp.fromDate(selectedEndDate!));
-    }
-
-    return query.snapshots();
   }
 }

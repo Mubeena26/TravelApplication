@@ -137,7 +137,13 @@ class _TourDetailState extends State<TourDetail> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BookingScreen(tourData: tourData),
+                        builder: (context) => BookingScreen(
+                          tourData: {
+                            ...tourData, // Pass all the existing data
+                            'selectedPackageName':
+                                packageName, // Add the selected packageName
+                          },
+                        ),
                       ),
                     );
                   },

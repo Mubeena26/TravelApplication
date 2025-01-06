@@ -1,13 +1,14 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travelapp_project/Features/chat/bloc/chat_bloc.dart';
 import 'package:travelapp_project/Features/chat/bloc/chat_event.dart';
 import 'package:travelapp_project/Features/chat/bloc/chat_state.dart';
+
+import 'package:travelapp_project/Features/chat/bloc/chat_bloc.dart'; // Adjust according to your folder structure
 import 'package:travelapp_project/Features/chat/chat_bubble.dart';
+import 'package:travelapp_project/Features/utils/utils_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({
@@ -25,39 +26,39 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: whitecolor,
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 66, 88, 132),
+        backgroundColor: lightPrimary,
         toolbarHeight: 80,
         titleSpacing: 20,
         automaticallyImplyLeading: false,
         title: Text(
           "Chat With Le'xplore",
           style: TextStyle(
-            color: Colors.white,
+            color: whitecolor,
             fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
           IconButton(
               onPressed: () async {
-                // final Uri url = Uri(scheme: 'tel', path: '9072051005');
+                final Uri url = Uri(scheme: 'tel', path: '9072051005');
 
-                // if (await canLaunchUrl(url)) {
-                //   launchUrl(url);
-                // } else {
-                //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                //     content: Text(
-                //       "can't do the call",
-                //       style: TextStyle(color: colorteal),
-                //     ),
-                //     backgroundColor: whitecolor,
-                //   ));
-                // }
+                if (await canLaunchUrl(url)) {
+                  launchUrl(url);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text(
+                      "can't do the call",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    backgroundColor: whitecolor,
+                  ));
+                }
               },
               icon: const Icon(
                 Icons.phone_in_talk,
-                color: Colors.white,
+                color: whitecolor,
               )),
         ],
       ),
@@ -95,7 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: InputDecoration(
                   prefixIcon: const Icon(
                     Icons.message,
-                    color: Color.fromARGB(255, 158, 196, 226),
+                    color: lightPrimary,
                     size: 30,
                   ),
                   hintText: 'Type a message.....',
@@ -105,19 +106,19 @@ class _ChatScreenState extends State<ChatScreen> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide: const BorderSide(
-                      color: Colors.black,
+                      color: blackcolor,
                       width: 2.0,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide: const BorderSide(
-                      color: Colors.black,
+                      color: blackcolor,
                       width: 2.0,
                     ),
                   ),
                   suffixIcon: IconButton(
-                    color: Colors.black,
+                    color: blackcolor,
                     iconSize: 35,
                     icon: const Icon(Icons.send),
                     onPressed: () {
@@ -148,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
           'This message was deleted',
           style: TextStyle(
             fontStyle: FontStyle.italic,
-            color: Colors.grey[400],
+            color: grey,
           ),
         ),
       );
@@ -162,17 +163,17 @@ class _ChatScreenState extends State<ChatScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              backgroundColor: Colors.black,
+              backgroundColor: blackcolor,
               title: const Text(
                 'Delete Message',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: blackcolor,
                 ),
               ),
               content: const Text(
                 'Are you sure you want to delete this message?',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: blackcolor,
                 ),
               ),
               actions: [
@@ -181,7 +182,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: const Text(
                     'Cancel',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: blackcolor,
                     ),
                   ),
                 ),
@@ -202,12 +203,12 @@ class _ChatScreenState extends State<ChatScreen> {
           if (value) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                  backgroundColor: Colors.black,
+                  backgroundColor: blackcolor,
                   content: Center(
                       child: Text(
                     'Message deleted',
                     style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                        color: blackcolor, fontWeight: FontWeight.bold),
                   ))),
             );
           }
@@ -220,7 +221,7 @@ class _ChatScreenState extends State<ChatScreen> {
         alignment: Alignment.centerRight,
         child: const Icon(
           Icons.delete,
-          color: Colors.white,
+          color: whitecolor,
         ),
       ),
       child: GestureDetector(
@@ -242,7 +243,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return const Center(
         child: Text(
           'No messages yet',
-          style: TextStyle(fontSize: 18, color: Colors.grey),
+          style: TextStyle(fontSize: 18, color: grey),
         ),
       );
     } else {

@@ -34,12 +34,12 @@ class FirebaseAuthService {
       print(e.toString());
     }
   }
+}
 
-  // Future<void> userSetup(String name) async {
-  //   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  //   FirebaseAuth auth = FirebaseAuth.instance;
-  //   String uid = auth.currentUser.uid.toString();
-  //   users.add({'displayname': name, 'uid': uid});
-  //   return;
-  // }
+Future<void> userSetup(String name, String email) async {
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String uid = auth.currentUser!.uid.toString();
+  users.add({'displayname': name, 'uid': uid, 'email': email});
+  return;
 }

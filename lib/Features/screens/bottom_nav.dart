@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:travelapp_project/Features/Home/widgets/home_screen.dart';
 import 'package:travelapp_project/Features/chat/chat_screen.dart';
-import 'package:travelapp_project/Features/screens/hello.dart';
-import 'package:travelapp_project/Features/screens/user_screen.dart';
-import 'package:travelapp_project/Features/tour/booking_details.dart';
+
+import 'package:travelapp_project/Features/settings/user_screen.dart';
+
 import 'package:travelapp_project/Features/tour/order_summary.dart';
 
 class BottomNav extends StatefulWidget {
@@ -25,10 +24,7 @@ class _BottomNavState extends State<BottomNav> {
     final List<Widget> body = [
       const HomeScreen(),
       const ChatScreen(),
-      widget.bookingId.isNotEmpty
-          ? OrderSummaryScreen(
-              bookingId: widget.bookingId) // Ensure bookingId is valid
-          : const Center(child: Text("No booking details available")),
+      OrderSummaryScreen(),
       UserScreen(),
     ];
 

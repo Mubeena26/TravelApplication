@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,6 +7,7 @@ import 'package:travelapp_project/Features/Authentication/forgot_password.dart';
 import 'package:travelapp_project/Features/Home/widgets/form_container.dart';
 import 'package:travelapp_project/Features/Home/widgets/home_screen.dart';
 import 'package:travelapp_project/Features/Authentication/signup_screen.dart';
+import 'package:travelapp_project/Features/screens/bottom_nav.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -228,10 +230,13 @@ class _LoginScreenState extends State<LoginScreen> {
           duration: Duration(seconds: 2),
         ),
       );
-
+      final String bookingId = await _getBookingIdForUser(user.uid);
       // Navigate to HomeScreen
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(
+            builder: (context) => BottomNav(
+                  bookingId: bookingId,
+                )),
       );
     } else {
       _showErrorDialog('Sign-in failed. Please try again later.');
@@ -275,6 +280,24 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       print("Google sign-in error: $e");
       _showErrorDialog('Google sign-in failed. Please try again.');
+    }
+  }
+
+  Future<String> _getBookingIdForUser(String userId) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      if (snapshot.exists) {
+        return snapshot['bookingId'] ?? '';
+      } else {
+        return ''; // Return a default value if bookingId is not available
+      }
+    } catch (e) {
+      debugPrint('Failed to fetch bookingId: $e');
+      return ''; // Return a default value on error
     }
   }
 }

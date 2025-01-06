@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:travelapp_project/Features/utils/utils_colors.dart';
 
 class ChatBubble extends StatelessWidget {
   final String message;
@@ -16,7 +18,7 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime date = timestamp.toDate();
-    // String formattedDate = datefo('dd MMM yyyy, hh:mm a').format(date);
+    String formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(date);
     return Container(
       margin: isSentByMe
           ? const EdgeInsets.only(left: 50, top: 10, bottom: 10, right: 10)
@@ -25,10 +27,7 @@ class ChatBubble extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: isSentByMe
             ? LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 66, 88, 132),
-                  Color.fromARGB(255, 84, 149, 255),
-                ],
+                colors: [chatgradient, chatgradient2],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
@@ -36,8 +35,8 @@ class ChatBubble extends StatelessWidget {
                 colors: [
                   // Colors.teal.shade700,
                   // Colors.teal.shade300,
-                  Color.fromARGB(255, 66, 88, 132),
-                  Color.fromARGB(255, 84, 149, 255),
+                  chatgradient2,
+                  chatgradient
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -55,7 +54,7 @@ class ChatBubble extends StatelessWidget {
               ),
         boxShadow: const [
           BoxShadow(
-            color: Colors.black26,
+            color: blackcolor,
             blurRadius: 4,
             offset: Offset(2, 2),
           ),
@@ -69,17 +68,17 @@ class ChatBubble extends StatelessWidget {
             message,
             style: TextStyle(
               fontSize: 18,
-              color: isSentByMe ? Colors.white : Colors.white,
+              color: isSentByMe ? whitecolor : whitecolor,
             ),
           ),
           const SizedBox(height: 5),
-          // Text(
-          //   formattedDate,
-          //   style: TextStyle(
-          //     fontSize: 12,
-          //     color: isSentByMe ? Colors.white70 : Colors.white70,
-          //   ),
-          // ),
+          Text(
+            formattedDate,
+            style: TextStyle(
+              fontSize: 12,
+              color: isSentByMe ? whitecolor : whitecolor,
+            ),
+          ),
         ],
       ),
     );
