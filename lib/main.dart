@@ -2,18 +2,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:travelapp_project/Features/Authentication/firebase_options.dart';
+import 'package:travelapp_project/Features/Authentication/services/firebase_options.dart';
 import 'package:travelapp_project/Features/Flight/bloc/flight_bloc.dart';
+import 'package:travelapp_project/Features/Home/bloc/nav_bloc.dart';
+import 'package:travelapp_project/Features/Home/bloc/tab_bloc.dart';
 import 'package:travelapp_project/Features/chat/bloc/chat_bloc.dart';
 import 'package:travelapp_project/Features/chat/bloc/chat_event.dart';
 import 'package:travelapp_project/Features/chat/bloc/chat_state.dart';
-import 'package:travelapp_project/Features/chat/chat_services.dart';
+import 'package:travelapp_project/Features/chat/services/chat_services.dart';
 import 'package:travelapp_project/Features/hotel/bloc/bloc/hotel_bloc.dart';
-import 'package:travelapp_project/Features/screens/splash_screen.dart';
+import 'package:travelapp_project/Features/Home/screens/splash_screen.dart';
 
 import 'package:travelapp_project/Features/tour/bloc/booking_bloc.dart';
 import 'package:travelapp_project/Features/tour/bloc/tour_bloc.dart';
-import 'package:travelapp_project/Features/tour/tour_model.dart';
+import 'package:travelapp_project/Features/tour/models/tour_model.dart';
 // Adjust the import as per your file structure.
 
 void main() async {
@@ -38,6 +40,12 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => ChatBloc(ChatServices())..add(LoadMessages()),
+        ),
+        BlocProvider(
+          create: (context) => TabBloc(),
+        ),
+        BlocProvider(
+          create: (context) => NavBloc(),
         ),
         // Add more providers if needed in the future
       ],

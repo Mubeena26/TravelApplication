@@ -6,6 +6,7 @@ class BookingSaveEvent extends BookingEvent {
   final String phoneNumber;
   final int adultCount;
   final int childCount;
+  final DateTime bookedDate;
 
   BookingSaveEvent({
     required this.name,
@@ -13,5 +14,6 @@ class BookingSaveEvent extends BookingEvent {
     required this.phoneNumber,
     required this.adultCount,
     required this.childCount,
+    required this.bookedDate,
   });
 }

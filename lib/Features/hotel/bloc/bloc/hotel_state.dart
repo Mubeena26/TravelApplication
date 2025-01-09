@@ -24,3 +24,19 @@ class HotelError extends HotelState {
   // ignore: override_on_non_overriding_member
   List<Object?> get props => [message];
 }
+
+class DateSelected extends HotelState {
+  final DateTime? checkinDate;
+  final DateTime? checkoutDate;
+  DateSelected({this.checkinDate, this.checkoutDate});
+}
+
+class HotelCheckinUpdated extends HotelState {
+  final DateTime? checkinDate;
+  HotelCheckinUpdated(this.checkinDate);
+}
+
+class HotelCheckoutUpdated extends HotelState {
+  final DateTime? checkoutDate;
+  HotelCheckoutUpdated(this.checkoutDate);
+}

@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:travelapp_project/Features/chat/chat_services.dart';
+import 'package:travelapp_project/Features/chat/services/chat_services.dart';
 
 import 'chat_event.dart';
 import 'chat_state.dart';

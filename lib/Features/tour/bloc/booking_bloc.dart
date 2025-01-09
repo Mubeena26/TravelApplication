@@ -1,3 +1,5 @@
+// ignore_for_file: override_on_non_overriding_member
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travelapp_project/Features/tour/bloc/booking_event.dart';
 import 'package:travelapp_project/Features/tour/bloc/booking_state.dart';
@@ -20,10 +22,10 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
           'price': (event.adultCount * 100.0) +
               (event.childCount * 50.0), // Adjust the price logic as needed
           'status': 'Pending',
+          'bookedDate': event.bookedDate, // Add timestamp
         };
 
         // Simulate a success state without persisting to Firestore
-        print('Booking data (simulated): $booking');
         yield BookingSuccessState();
       } catch (e) {
         yield BookingErrorState('Error processing booking!');
