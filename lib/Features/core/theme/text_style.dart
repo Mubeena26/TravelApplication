@@ -3,13 +3,16 @@ import 'package:travelapp_project/Features/core/theme/utils_colors.dart';
 
 class AppTextStyles {
   // Headline Styles
-  static const TextStyle headline1 = TextStyle(
-    color: whitecolor,
-    fontWeight: FontWeight.bold,
-  );
-  static const TextStyle booking =
-      TextStyle(color: whitecolor, fontWeight: FontWeight.bold, fontSize: 16);
-  static const TextStyle booking2 = TextStyle(color: whitecolor, fontSize: 16);
+  static const TextStyle headline1 =
+      TextStyle(color: whitecolor, fontWeight: FontWeight.bold, fontSize: 22);
+
+  static const TextStyle booking = TextStyle(
+      color: whitecolor,
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+      fontFamily: "MyFlutterApp");
+  static const TextStyle booking2 =
+      TextStyle(color: whitecolor, fontSize: 16, fontFamily: "MyFlutterApp");
   static const TextStyle home = TextStyle(
     color: Color.fromARGB(255, 66, 88, 132),
     fontWeight: FontWeight.bold,
@@ -26,14 +29,14 @@ class AppTextStyles {
   );
 
   // Body Text Styles
-  static const TextStyle body1 = TextStyle(
-      fontWeight: FontWeight.normal, fontSize: 25, color: lightPrimary);
+  static const TextStyle body1 =
+      TextStyle(fontWeight: FontWeight.normal, fontSize: 25, color: whitecolor);
   static const TextStyle body4 =
-      TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: lightPrimary);
+      TextStyle(fontWeight: FontWeight.w400, fontSize: 20, color: whitecolor);
   static const TextStyle body2 =
-      TextStyle(fontWeight: FontWeight.w700, fontSize: 48, color: lightPrimary);
-  static const TextStyle body3 = TextStyle(
-      fontWeight: FontWeight.normal, fontSize: 10, color: lightPrimary);
+      TextStyle(fontWeight: FontWeight.w700, fontSize: 48, color: whitecolor);
+  static const TextStyle body3 =
+      TextStyle(fontWeight: FontWeight.normal, fontSize: 10, color: whitecolor);
 
   static const TextStyle bodyText2 = TextStyle(
     fontSize: 14,

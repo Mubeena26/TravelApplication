@@ -31,4 +31,11 @@ const Color board1 = Colors.white;
 const Color board2 = Color.fromARGB(255, 139, 216, 249);
 const Color board3 = Color.fromARGB(255, 112, 197, 233);
 const Color button1 = Color.fromARGB(255, 41, 182, 246); // Start color
-const Color button2 = Color.fromARGB(255, 0, 122, 255);// End color
+const Color button2 = Color.fromARGB(255, 0, 122, 255); // End color
+
+const Color App1 = Color(0xFF06141B);
+const Color App2 = Color(0xFF11212D);
+const Color App3 = Color(0xFF253745);
+const Color App4 = Color(0xFF4A5C6A); // #4A5C6A
+const Color App5 = Color(0xFF9BA8AB); // #9BA8AB
+const Color App6 = Color(0xFFCCD0CF); // #CCD0CF

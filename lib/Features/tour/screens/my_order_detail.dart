@@ -29,12 +29,15 @@ class OrderSummarydetail extends StatelessWidget {
         bookingData['imagePath'] as List<dynamic>?; // Assuming it's a list
 
     return Scaffold(
-      backgroundColor: homebg,
+      backgroundColor: App2,
       appBar: CustomAppBar(
         title: "Order Details",
-        backgroundColor: home,
+        backgroundColor: App2,
         toolbarHeight: 60,
-        style: AppTextStyles.home,
+        iconTheme: IconThemeData(
+          color: whitecolor, // Change this to the desired color
+        ),
+        style: AppTextStyles.headline1,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -44,7 +47,7 @@ class OrderSummarydetail extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [tab1, tab2, tab1],
+                  colors: [whitecolor, whitecolor, whitecolor],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),

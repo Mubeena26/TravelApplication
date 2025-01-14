@@ -22,13 +22,15 @@ class HotelItem extends StatelessWidget {
     double priceInInr = priceInUsd * usdToInrConversionRate;
 
     return Container(
+      // color: App2,
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
+        color: App3,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
-            color: homebg.withOpacity(0.5),
+            color: App4,
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, 3),
@@ -40,30 +42,40 @@ class HotelItem extends StatelessWidget {
         children: [
           const SizedBox(height: 8.0),
           Text(hotel['name'] ?? 'Name not available',
-              style: AppTextStyles.button),
+              style: TextStyle(
+                  color: whitecolor, fontFamily: "myFlutterApp", fontSize: 18)),
           const Divider(),
           const SizedBox(height: 8.0),
           Text(hotel['description'] ?? 'Description not available',
-              style: AppTextStyles.bodyText2),
+              style: TextStyle(
+                  color: whitecolor, fontFamily: "myFlutterApp", fontSize: 13)),
           const SizedBox(height: 8.0),
           Text(
               hotel['rate_per_night'] != null
                   ? 'Rate per night: ${hotel['rate_per_night']['lowest']} (USD) | ₹${priceInInr.toStringAsFixed(2)} (INR)'
                   : 'Rate not available',
-              style: AppTextStyles.button),
+              style: TextStyle(
+                  color: whitecolor, fontFamily: "myFlutterApp", fontSize: 13)),
           const SizedBox(height: 8.0),
           Text('Check-in Time: ${hotel['check_in_time']}',
-              style: AppTextStyles.bodyText2),
+              style: TextStyle(
+                  color: whitecolor, fontFamily: "myFlutterApp", fontSize: 13)),
           Text('Check-out Time: ${hotel['check_out_time']}',
-              style: AppTextStyles.bodyText2),
+              style: TextStyle(
+                  color: whitecolor, fontFamily: "myFlutterApp", fontSize: 13)),
           const SizedBox(height: 8.0),
-          const Text('Nearby places:', style: AppTextStyles.bodyText2),
+          const Text('Nearby places:',
+              style: TextStyle(
+                  color: whitecolor, fontFamily: "myFlutterApp", fontSize: 13)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
               hotel['nearby_places'].length,
               (index) => Text('- ${hotel['nearby_places'][index]['name']}',
-                  style: AppTextStyles.bodyText2),
+                  style: TextStyle(
+                      color: whitecolor,
+                      fontFamily: "myFlutterApp",
+                      fontSize: 13)),
             ),
           ),
         ],

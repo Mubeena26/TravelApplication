@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:travelapp_project/Features/Home/screens/home_screen.dart';
 import 'package:travelapp_project/Features/Home/screens/bottom_nav.dart';
@@ -32,7 +33,7 @@ class _BookingScreenState extends State<BookingScreen> {
   int adultCount = 0;
   int childCount = 0;
   DateTime bookedDate = DateTime.now(); // Initialize bookedDate
-
+  PhoneNumber phoneNumbers = PhoneNumber(isoCode: 'US'); // Default country code
   double _calculateTotalPrice() {
     final double adultPrice =
         double.tryParse(widget.tourData['adultPer']?.toString() ?? '0') ?? 0;
@@ -74,11 +75,14 @@ class _BookingScreenState extends State<BookingScreen> {
         backgroundColor: homebg,
         appBar: CustomAppBar(
           title: "Booking Details",
-          backgroundColor: lightPrimary,
+          backgroundColor: App2,
           toolbarHeight: 60,
+          iconTheme: IconThemeData(
+            color: whitecolor, // Change this to the desired color
+          ),
         ),
         body: Container(
-          color: homebg,
+          color: App2,
           child: Stack(
             children: [
               Padding(
@@ -121,16 +125,25 @@ class _BookingScreenState extends State<BookingScreen> {
                                   enabled: false, // Prevent editing the email
                                 ),
                                 const SizedBox(height: 10),
-                                TextFormField(
-                                  decoration: const InputDecoration(
-                                      labelText: 'Phone Number'),
-                                  validator: (value) => value == null ||
-                                          value.isEmpty ||
-                                          value.contains(' ')
-                                      ? 'Enter your phone number'
-                                      : null,
-                                  onChanged: (value) =>
-                                      setState(() => phoneNumber = value),
+                                InternationalPhoneNumberInput(
+                                  onInputChanged: (PhoneNumber number) {
+                                    setState(() {
+                                      phoneNumbers = number;
+                                      phoneNumber = number.phoneNumber ?? '';
+                                    });
+                                  },
+                                  initialValue: phoneNumbers,
+                                  formatInput: true,
+                                  inputDecoration: const InputDecoration(
+                                    labelText: 'Phone Number',
+                                  ),
+                                  validator: (value) {
+                                    if (phoneNumber.isEmpty ||
+                                        phoneNumber.length < 10) {
+                                      return 'Please enter a valid phone number';
+                                    }
+                                    return null; // Return null if the validation passes
+                                  },
                                 ),
                                 const SizedBox(height: 10),
                                 Row(
@@ -186,7 +199,7 @@ class _BookingScreenState extends State<BookingScreen> {
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: tab1,
+                                    backgroundColor: App2,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 50, vertical: 10),
                                     shape: RoundedRectangleBorder(
@@ -194,7 +207,7 @@ class _BookingScreenState extends State<BookingScreen> {
                                     ),
                                   ),
                                   child: const Text('Submit Booking',
-                                      style: AppTextStyles.button),
+                                      style: TextStyle(color: whitecolor)),
                                 )
                               ],
                             ),
@@ -204,10 +217,14 @@ class _BookingScreenState extends State<BookingScreen> {
                       const SizedBox(height: 30),
                       const Divider(),
                       const SizedBox(height: 10),
-                      const Text('Booking Summary', style: AppTextStyles.body4),
+                      const Text('Booking Summary',
+                          style: TextStyle(
+                              color: whitecolor,
+                              fontSize: 20,
+                              fontFamily: "MyFlutterApp")),
                       const SizedBox(height: 10),
                       Card(
-                        color: lightPrimary,
+                        color: App3,
                         elevation: 4,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -300,7 +317,7 @@ class _BookingScreenState extends State<BookingScreen> {
                                     razorpay.open(options);
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: tab1,
+                                    backgroundColor: whitecolor,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 50, vertical: 10),
                                     shape: RoundedRectangleBorder(
@@ -308,7 +325,7 @@ class _BookingScreenState extends State<BookingScreen> {
                                     ),
                                   ),
                                   child: const Text('Pay Now',
-                                      style: AppTextStyles.button),
+                                      style: TextStyle(color: App2)),
                                 ),
                               ),
                             ],

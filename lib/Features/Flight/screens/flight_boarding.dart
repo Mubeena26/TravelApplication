@@ -45,7 +45,7 @@ class _FlightBoardingState extends State<FlightBoarding>
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [board1, board2, board3],
+            colors: [App6, App5, App4],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             stops: [0.5, 0.8, 1],
@@ -62,11 +62,11 @@ class _FlightBoardingState extends State<FlightBoarding>
               ),
               const Text(
                 'Explore',
-                style: AppTextStyles.body2,
+                style: AppTextStyles.body1,
               ),
               const Text(
                 'The World',
-                style: AppTextStyles.body2,
+                style: AppTextStyles.body1,
               ),
               const SizedBox(height: 30),
               const Text(
@@ -80,7 +80,7 @@ class _FlightBoardingState extends State<FlightBoarding>
               Container(
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [button1, button2],
+                    colors: [App2, App3],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
@@ -88,7 +88,7 @@ class _FlightBoardingState extends State<FlightBoarding>
                 ),
                 child: CustomButton(
                   text: 'Next',
-                  backgroundColor: tab1,
+                  backgroundColor: App2,
                   textColor: whitecolor,
                   borderRadius: 30.0,
                   onPressed: () {

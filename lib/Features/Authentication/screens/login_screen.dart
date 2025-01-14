@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [board1, board2, board3],
+            colors: [App6, App3, App2],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             stops: [0.5, 0.8, 1],
@@ -169,13 +169,16 @@ class _LoginScreenState extends State<LoginScreen> {
           child: ElevatedButton(
             onPressed: () => _login(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: tab1,
+              backgroundColor: App2,
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(22),
               ),
             ),
-            child: const Text('Login'),
+            child: const Text(
+              'Login',
+              style: TextStyle(color: whitecolor),
+            ),
           ),
         ),
       ),
@@ -198,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(width: 8),
               const Text(
                 'Sign in with Google',
-                style: TextStyle(color: blackcolor),
+                style: TextStyle(color: whitecolor),
               ),
             ],
           ),

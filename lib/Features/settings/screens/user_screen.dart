@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travelapp_project/Features/Authentication/screens/auth_three.dart';
 import 'package:travelapp_project/Features/Authentication/screens/login_screen.dart';
+import 'package:travelapp_project/Features/core/theme/utils_colors.dart';
 import 'package:travelapp_project/Features/settings/screens/about.dart';
 import 'package:travelapp_project/Features/settings/screens/privacy.dart';
 import 'package:travelapp_project/Features/settings/screens/support.dart';
@@ -36,7 +38,7 @@ class UserScreen extends StatelessWidget {
     final User? user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 232, 240, 253),
+      backgroundColor: App2,
       body: Theme(
         data: Theme.of(context).copyWith(
           brightness: Brightness.dark,
@@ -78,12 +80,12 @@ class UserScreen extends StatelessWidget {
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20.0,
-                                color: Colors.black),
+                                color: whitecolor),
                           ),
                           Text(
                             user?.email ?? "No Email",
                             style: TextStyle(
-                              color: Colors.grey.shade400,
+                              color: whitecolor,
                             ),
                           ),
                         ],
@@ -95,6 +97,7 @@ class UserScreen extends StatelessWidget {
                 ListTile(
                   title: const Text(
                     "About us",
+                    style: TextStyle(color: whitecolor),
                   ),
                   // subtitle: Text(
                   //   "English US",
@@ -102,7 +105,7 @@ class UserScreen extends StatelessWidget {
                   // ),
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.grey.shade400,
+                    color: whitecolor,
                   ),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -113,6 +116,7 @@ class UserScreen extends StatelessWidget {
                 ListTile(
                   title: const Text(
                     "Privacy policy",
+                    style: TextStyle(color: whitecolor),
                   ),
                   // subtitle: Text(
                   //   user?.displayName ?? "No Name",
@@ -120,7 +124,7 @@ class UserScreen extends StatelessWidget {
                   // ),
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.grey.shade400,
+                    color: whitecolor,
                   ),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -131,6 +135,7 @@ class UserScreen extends StatelessWidget {
                 ListTile(
                   title: const Text(
                     "Support",
+                    style: TextStyle(color: whitecolor),
                   ),
                   // subtitle: Text(
                   //   user?.displayName ?? "No Name",
@@ -138,7 +143,7 @@ class UserScreen extends StatelessWidget {
                   // ),
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
-                    color: Colors.grey.shade400,
+                    color: whitecolor,
                   ),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -149,6 +154,7 @@ class UserScreen extends StatelessWidget {
                 ListTile(
                   title: const Text(
                     "Logout",
+                    style: TextStyle(color: whitecolor),
                   ),
                   onTap: () async {
                     // await FirebaseAuth.instance.signOut();
@@ -167,7 +173,7 @@ class UserScreen extends StatelessWidget {
                               FirebaseAuth.instance.signOut();
                               Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                      builder: (context) => LoginScreen()));
+                                      builder: (context) => AuthThreePage()));
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text('Logout successful')));

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:travelapp_project/Features/Home/screens/bottom_nav.dart';
 import 'package:travelapp_project/Features/core/theme/utils_colors.dart';
+import 'package:travelapp_project/Features/hotel/screens/hotel_boarding_screen.dart';
 import 'package:travelapp_project/Features/tour/screens/tour_boarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 4),
     );
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
 
@@ -61,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen>
         // Navigate to TourBoarding screen
         if (!mounted) return;
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => TourBoarding()),
+          MaterialPageRoute(builder: (context) => HotelBoarding()),
         );
       }
     } catch (e) {
@@ -69,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen>
       debugPrint('Error in _checkUserStatus: $e');
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => TourBoarding()),
+        MaterialPageRoute(builder: (context) => HotelBoarding()),
       );
     }
   }
@@ -95,33 +96,71 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [gradient1, gradient2, gradient3],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [0.5, 0.8, 1.0],
+      body: Stack(
+        children: [
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/WhatsApp Image 2025-01-14 at 11.53.23_c4dbafc0.jpg',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Center(
-          child: AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              return Opacity(
-                opacity: _animation.value,
-                child: const Text(
-                  "Le'xplore",
-                  style: TextStyle(
-                    color: lightPrimary,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 40,
+          // Gradient overlay
+          // Positioned.fill(
+          //   child: Container(
+          //     decoration: const BoxDecoration(
+          //       gradient: LinearGradient(
+          //         colors: [App6, App3, App2],
+          //         begin: Alignment.topCenter,
+          //         end: Alignment.bottomCenter,
+          //         stops: [0.5, 0.8, 1.0],
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // Centered animated text
+          // Center(
+          //   child: AnimatedBuilder(
+          //     animation: _animation,
+          //     builder: (context, child) {
+          //       return Opacity(
+          //         opacity: _animation.value,
+          //         child: const Text(
+          //           "Le'xplore",
+          //           style: TextStyle(
+          //             color: App2,
+          //             fontWeight: FontWeight.w800,
+          //             fontSize: 40,
+          //           ),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+          // Bottom text
+          Positioned(
+            bottom: 30.0,
+            left: 130.0,
+            right: 10.0,
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animation.value,
+                  child: const Text(
+                    "Le'xplore",
+                    style: TextStyle(
+                      color: whitecolor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "icomoon",
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -1,106 +1,105 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:ui';
 
-import 'package:travelapp_project/Features/Authentication/screens/login_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:travelapp_project/Features/Authentication/screens/auth_three.dart';
 import 'package:travelapp_project/Features/core/theme/text_style.dart';
 import 'package:travelapp_project/Features/core/theme/utils_colors.dart';
+import 'package:travelapp_project/Features/core/widgets/elevated_button.dart';
 
-class HotelBoarding extends StatefulWidget {
+class HotelBoarding extends StatelessWidget {
   const HotelBoarding({super.key});
-
-  @override
-  State<HotelBoarding> createState() => _HotelBoardingState();
-}
-
-class _HotelBoardingState extends State<HotelBoarding>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 3));
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
-
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: homebg,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Hassle-Free Hotel', style: AppTextStyles.body1),
-            const Text('Searching', style: AppTextStyles.body1),
-            const SizedBox(height: 70),
-            const Text('Search and compare thousands of hotels to',
-                style: AppTextStyles.body3),
-            const Text('find the best deal for your stay',
-                style: AppTextStyles.body3),
-            const SizedBox(height: 70),
-            Container(
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    button1,
-                    button2,
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => LoginScreen(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  'Next',
-                  style: TextStyle(color: whitecolor, fontSize: 24),
-                ),
-              ),
-            ),
-            const SizedBox(height: 110),
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return Opacity(
-                  opacity: _animation.value,
-                  child: child,
-                );
-              },
+      body: Stack(
+        children: [
+          // Background image with blur effect
+          Positioned.fill(
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
               child: Image.asset(
-                'assets/Friends vacation_ Men woman with 1.png',
-                fit: BoxFit.contain,
+                'assets/download (2).jpg',
+                fit: BoxFit.cover,
               ),
             ),
-          ],
-        ),
+          ),
+
+          // Centered content
+          Center(
+            // child: Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       const Text(
+            //         'Let’s Explore The World',
+            //         style: AppTextStyles.body1,
+            //         textAlign: TextAlign.start,
+            //       ),
+            //       const SizedBox(height: 20),
+            //       const Text(
+            //         'Journey beyond borders with our range of flight choices,\noffering you the freedom to explore the world like never before.',
+            //         style: AppTextStyles.body3,
+            //         textAlign: TextAlign.center,
+            //       ),
+            //       const SizedBox(height: 40),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 100),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Let’s',
+                    style: AppTextStyles.body1,
+                  ),
+                  const Text(
+                    'Explore',
+                    style: AppTextStyles.body1,
+                  ),
+                  const Text(
+                    'The World',
+                    style: AppTextStyles.body1,
+                  ),
+                  const SizedBox(height: 30),
+                  const Text(
+                      'Journey beyond borders with our range of flight choices, ',
+                      style: AppTextStyles.body3),
+                  const Text(
+                      'offering you the freedom to explore the world like never before.',
+                      style: AppTextStyles.body3),
+                  const SizedBox(height: 50),
+                  // Next Button
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [App2, App2],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: CustomButton(
+                      text: 'Next',
+                      backgroundColor: App2,
+                      textColor: whitecolor,
+                      borderRadius: 30.0,
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => AuthThreePage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

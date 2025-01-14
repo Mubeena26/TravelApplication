@@ -171,12 +171,15 @@ class OrderSummaryScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: home,
+      backgroundColor: App2,
       appBar: CustomAppBar(
           title: "Order Summary",
-          backgroundColor: homebg,
+          backgroundColor: App2,
           toolbarHeight: 60,
-          style: AppTextStyles.home),
+          iconTheme: IconThemeData(
+            color: whitecolor, // Change this to the desired color
+          ),
+          style: AppTextStyles.headline1),
       body: StreamBuilder<QuerySnapshot>(
         stream: _fetchBookingDetails(userId),
         builder: (context, snapshot) {
@@ -207,6 +210,7 @@ class OrderSummaryScreen extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Card(
+                    color: App3,
                     elevation: 5,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -224,18 +228,18 @@ class OrderSummaryScreen extends StatelessWidget {
                                 Text(
                                   'Package Name:',
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: lightPrimary,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: whitecolor,
                                   ),
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
                                   packageName,
                                   style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: bluetheme),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                      color: App6),
                                 ),
                                 const SizedBox(height: 15),
                                 Text(
@@ -243,7 +247,7 @@ class OrderSummaryScreen extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: blackcolor,
+                                    color: whitecolor,
                                   ),
                                 ),
                                 const SizedBox(height: 5),

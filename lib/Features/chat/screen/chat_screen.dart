@@ -33,10 +33,13 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: CustomAppBar(
         title: "Le'xplore",
         style: AppTextStyles.headline1,
-        backgroundColor: lightPrimary,
+        backgroundColor: App2,
         toolbarHeight: 60,
         titleSpacing: 20,
         automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(
+          color: Colors.red, // Change this to the desired color
+        ),
         actions: [
           CustomIconButton(
             icon: Icons.phone_in_talk,
@@ -93,7 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: InputDecoration(
                   prefixIcon: const Icon(
                     Icons.message,
-                    color: lightPrimary,
+                    color: App2,
                     size: 30,
                   ),
                   hintText: 'Type a message.....',
@@ -103,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide: const BorderSide(
-                      color: blackcolor,
+                      color: App2,
                       width: 2.0,
                     ),
                   ),
@@ -156,7 +159,7 @@ class _ChatScreenState extends State<ChatScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              backgroundColor: blackcolor,
+              backgroundColor: App2,
               title:
                   const Text('Delete Message', style: AppTextStyles.chatCall),
               content: const Text(
@@ -184,7 +187,7 @@ class _ChatScreenState extends State<ChatScreen> {
           if (value) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                  backgroundColor: blackcolor,
+                  backgroundColor: App2,
                   content: Center(
                       child: Text('Message deleted',
                           style: AppTextStyles.chatMssag2))),

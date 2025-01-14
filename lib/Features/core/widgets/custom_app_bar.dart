@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelapp_project/Features/core/theme/utils_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -16,12 +17,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.style,
     this.actions,
     this.leading,
-    this.backgroundColor = const Color.fromARGB(255, 244, 254, 255),
+    this.backgroundColor = App2,
     this.elevation = 4.0,
     this.toolbarHeight = 80.0,
     this.titleSpacing = 20.0,
     this.automaticallyImplyLeading = false,
     Key? key,
+    required IconThemeData iconTheme,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: toolbarHeight,
       titleSpacing: titleSpacing,
       automaticallyImplyLeading: automaticallyImplyLeading,
+      iconTheme: IconThemeData(
+        color: whitecolor, // Change this to your desired color
+      ),
     );
   }
 

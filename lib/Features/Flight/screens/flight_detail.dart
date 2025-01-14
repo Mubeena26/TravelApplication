@@ -16,11 +16,11 @@ class FlightItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       decoration: BoxDecoration(
-        color: whitecolor,
+        color: App3,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
-            color: blackcolor.withOpacity(0.8),
+            color: App4.withOpacity(0.8),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, 4),
@@ -36,6 +36,7 @@ class FlightItem extends StatelessWidget {
               height: 60,
               width: 60,
               fit: BoxFit.cover,
+              color: whitecolor,
             ),
             const SizedBox(width: 16.0),
             Expanded(
@@ -44,10 +45,16 @@ class FlightItem extends StatelessWidget {
                 children: [
                   Text(
                       '${flight['flights'][0]['departure_airport']['name']} to ${flight['flights'][0]['arrival_airport']['name']}',
-                      style: AppTextStyles.button),
+                      style: TextStyle(
+                          color: whitecolor,
+                          fontFamily: "myFlutterApp",
+                          fontSize: 14)),
                   const SizedBox(height: 4.0),
                   Text('Duration: ${flight['total_duration']} mins',
-                      style: AppTextStyles.button1),
+                      style: TextStyle(
+                          color: whitecolor,
+                          fontFamily: "myFlutterApp",
+                          fontSize: 13)),
                   const SizedBox(height: 4.0),
                   Text(
                     'Price: \$${priceInInr.toStringAsFixed(2)}',

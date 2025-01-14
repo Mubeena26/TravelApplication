@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
 import 'package:travelapp_project/Features/core/theme/utils_colors.dart';
-import 'package:travelapp_project/Features/core/widgets/custom_app_bar.dart';
 import 'package:travelapp_project/Features/tour/screens/booking_popup.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class TourDetail extends StatefulWidget {
   final Map<String, dynamic> tourData;
@@ -59,315 +57,368 @@ class _TourDetailState extends State<TourDetail> {
         tourData['cancellationPolicy'] ?? 'No cancellation policy available';
 
     return Scaffold(
-      backgroundColor: lightPrimary,
-      appBar: CustomAppBar(
-        title: "Tour Details",
-        backgroundColor: lightPrimary,
-        toolbarHeight: 60,
-        automaticallyImplyLeading: true,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Carousel Image Section
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: CarouselSlider.builder(
-                  itemCount: imageUrls.length,
-                  itemBuilder: (context, index, realIndex) {
-                    final imageUrl = imageUrls[index];
-                    return Container(
-                      height: 340,
-                      width: 320,
-                      decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(color: whitecolor, blurRadius: 4),
-                        ],
-                        borderRadius: BorderRadius.circular(25),
-                        image: DecorationImage(
-                          image: NetworkImage(imageUrl),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                  options: CarouselOptions(
-                    height: 200,
-                    autoPlay: true,
-                    enlargeCenterPage: true,
-                    enableInfiniteScroll: true,
-                    autoPlayInterval: const Duration(seconds: 3),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              // Basic Tour Info Section (Package Name Card)
-              _buildInfoCard(packageName, destination, price),
-
-              const SizedBox(height: 20),
-
-              // All Detailed Info in One Card with Compact Row Layout
-              _buildAllDetailsCard(
-                  description,
-                  startDate,
-                  endDate,
-                  departureTime,
-                  arrivalTime,
-                  adultPrice,
-                  childPrice,
-                  activities,
-                  accommodationType,
-                  transportation,
-                  inclusions,
-                  exclusions,
-                  termsConditions,
-                  cancellationPolicy,
-                  imageUrls),
-
-              const SizedBox(height: 20),
-
-              // Book Now Button
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BookingScreen(
-                          tourData: {
-                            ...tourData, // Pass all the existing data
-                            'selectedPackageName':
-                                packageName, // Add the selected packageName
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: button1,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(22),
-                    ),
-                  ),
-                  child: const Text(
-                    'Book Now',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Helper function to create info cards for package name, destination, and price
-  Widget _buildInfoCard(String title, String subTitle, double price) {
-    return Container(
-      height: 90,
-      width: 320,
-      decoration: BoxDecoration(
-        color: whitecolor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Stack(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 22,
-                      color: lightPrimary,
-                      fontStyle: FontStyle.italic),
-                ),
-              ),
-              IconButton(
-                onPressed: () async {
-                  final Uri url = Uri(scheme: 'tel', path: '7025963877');
-
-                  if (await canLaunchUrl(url)) {
-                    launchUrl(url);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text(
-                        "can't do the call",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      backgroundColor: whitecolor,
-                    ));
-                  }
-                },
-                icon: const Icon(
-                  Icons.call,
-                  color: lightPrimary,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  subTitle,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: lightPrimary,
-                      fontStyle: FontStyle.italic),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Text(
-                  '\$${price.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.orangeAccent,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAllDetailsCard(
-      String description,
-      String startDate,
-      String endDate,
-      String departureTime,
-      String arrivalTime,
-      double adultPrice,
-      double childPrice,
-      List<String> activities,
-      String accommodationType,
-      String transportation,
-      List<String> inclusions,
-      List<String> exclusions,
-      String termsConditions,
-      String cancellationPolicy,
-      List<dynamic> imageUrls // Added imageUrls to pass the list of images
-      ) {
-    return Card(
-      color: whitecolor,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      elevation: 10,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Small images section
-            if (imageUrls.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(4, (index) {
-                    if (index < imageUrls.length) {
+          // Display the images in a carousel slider
+          Container(
+            height: 500,
+            width:
+                double.infinity, // Define the height you want for the carousel
+            child: imageUrls.isNotEmpty
+                ? CarouselSlider.builder(
+                    itemCount: imageUrls.length,
+                    itemBuilder: (context, index, realIndex) {
                       return Container(
-                        height: 60,
-                        width: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: NetworkImage(imageUrls[index]),
-                            fit: BoxFit.cover,
-                          ),
+                        width: double
+                            .infinity, // Ensure the container fills the width
+                        height: double.infinity,
+                        child: Image.network(
+                          imageUrls[index],
+                          fit: BoxFit
+                              .cover, // Make sure the image covers the container
                         ),
                       );
-                    } else {
-                      return SizedBox(); // Empty space if there are less than 4 images
-                    }
-                  }),
+                    },
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      aspectRatio: 16 / 9, // Aspect ratio remains 16:9
+                      viewportFraction: 1.0,
+                      enlargeStrategy: CenterPageEnlargeStrategy.height,
+                      height: 650,
+                    ),
+                  )
+                : const Center(
+                    child: Text(
+                      'Image not available',
+                      style: TextStyle(fontSize: 16.0, color: Colors.grey),
+                    ),
+                  ),
+          ),
+
+          SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      MaterialButton(
+                        padding: const EdgeInsets.all(8.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        color: Colors.white,
+                        textColor: Colors.black,
+                        minWidth: 0,
+                        height: 40,
+                        onPressed: () => Navigator.pop(context),
+                        child: const Icon(Icons.arrow_back_ios),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-
-            // The rest of the details in the card
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildDetailText(
-                    'Adult Price\n', '\$${adultPrice.toStringAsFixed(2)}'),
-                _buildDetailText(
-                    'Child Price\n', '\$${childPrice.toStringAsFixed(2)}'),
+                const Spacer(),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: App2,
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20.0),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                    packageName,
+                                    style: const TextStyle(
+                                      color: whitecolor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 28.0,
+                                      fontFamily: 'icomoon',
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    destination,
+                                    style: TextStyle(color: whitecolor),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 5.0,
+                                    vertical: 8.0,
+                                  ),
+                                  child: imageUrls.isNotEmpty
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 20),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: List.generate(4, (index) {
+                                              if (index < imageUrls.length) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    // Show image in a popup
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return Dialog(
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                          child: Image.network(
+                                                            imageUrls[index],
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    height: 60,
+                                                    width: 60,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      image: DecorationImage(
+                                                        image: NetworkImage(
+                                                            imageUrls[index]),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              } else {
+                                                return const SizedBox(); // Empty space if there are less than 4 images
+                                              }
+                                            }),
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                ),
+                                ExpansionTile(
+                                  title: const Text(
+                                    "Show Details",
+                                    style: TextStyle(
+                                      color: whitecolor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Start Date: $startDate",
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: whitecolor),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          Text(
+                                            "End Date: $endDate",
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: whitecolor),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          Text(
+                                            "Transportation: $transportation",
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: whitecolor),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          Text(
+                                            "Accommodation Type: $accommodationType",
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: whitecolor),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          Text(
+                                            "Adult Price: \$${adultPrice.toStringAsFixed(2)}",
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: orangecolor),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          Text(
+                                            "Child Price: \$${childPrice.toStringAsFixed(2)}",
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: orangecolor),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          const Text(
+                                            "Activities:",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.0,
+                                              color: whitecolor,
+                                            ),
+                                          ),
+                                          ...activities.map(
+                                            (activity) => Text(
+                                              "- $activity",
+                                              style: const TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: whitecolor),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          const Text(
+                                            "Inclusions:",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.0,
+                                              color: whitecolor,
+                                            ),
+                                          ),
+                                          ...inclusions.map(
+                                            (inclusion) => Text(
+                                              "- $inclusion",
+                                              style: const TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: whitecolor),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          const Text(
+                                            "Exclusions:",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.0,
+                                              color: whitecolor,
+                                            ),
+                                          ),
+                                          ...exclusions.map(
+                                            (exclusion) => Text(
+                                              "- $exclusion",
+                                              style: const TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: whitecolor),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          Text(
+                                            "Terms & Conditions: $termsConditions",
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: whitecolor),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          Text(
+                                            "Cancellation Policy: $cancellationPolicy",
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: whitecolor),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(20.0),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              topRight: Radius.circular(20.0),
+                            ),
+                            color: App2,
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                "\$${price.toStringAsFixed(2)}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              const Spacer(),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0,
+                                    horizontal: 16.0,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  backgroundColor: Colors.orange,
+                                  foregroundColor: Colors.white,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BookingScreen(
+                                        tourData: {
+                                          ...tourData, // Pass all the existing data
+                                          'selectedPackageName':
+                                              packageName, // Add the selected packageName
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      "Book Now",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10.0),
+                                    Container(
+                                      padding: const EdgeInsets.all(6.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      child: const Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Colors.orange,
+                                        size: 16.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildDetailText('Departure\n', departureTime),
-                _buildDetailText('Arrival\n', arrivalTime),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildDetailText('Accommodation\n', accommodationType),
-                _buildDetailText('Transportation\n', transportation),
-              ],
-            ),
-            _buildDetailText('Start\n', startDate),
-            _buildDetailText('End\n', endDate),
-            _buildDetailText('Inclusions\n', inclusions.join(', ')),
-            _buildDetailText('Exclusions\n', exclusions.join(', ')),
-            _buildDetailText('Terms and Conditions\n', termsConditions),
-            _buildDetailText('Cancellation Policy\n', cancellationPolicy),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Helper function to create text sections within cards
-  Widget _buildDetailText(String title, String content) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: lightPrimary,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            TextSpan(
-              text: content,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-                fontStyle: FontStyle.italic,
-                color: Colors.orangeAccent,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

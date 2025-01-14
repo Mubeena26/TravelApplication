@@ -87,7 +87,7 @@ class ChatServices {
     String chatRoomId = ids.join("_");
 
     DocumentReference messageDocRef = _firestore
-        .collection("chatroom")
+        .collection("chatRoom")
         .doc(chatRoomId)
         .collection("messages")
         .doc(messageId);
@@ -99,7 +99,7 @@ class ChatServices {
   // Get user chats
   Stream<QuerySnapshot> getUserChats(String adminId) {
     return _firestore
-        .collection('chatroom')
+        .collection('chatRoom')
         .where('participants', arrayContains: adminId)
         .snapshots();
   }

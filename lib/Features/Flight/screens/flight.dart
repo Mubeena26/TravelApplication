@@ -41,13 +41,19 @@ class _FlightPageState extends State<FlightPage> {
               key: _formKey,
               child: Column(
                 children: [
-                  Image.asset(
-                    'assets/download__9_-removebg-preview 1.png',
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Text('Image not found');
-                    },
+                  Container(
+                    height: 200,
+                    width: 300,
+                    child: Image.asset(
+                      'assets/download__9_-removebg-preview 1.png',
+                      color: whitecolor, // Apply the desired color
+                      colorBlendMode: BlendMode.srcIn,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Text('Image not found');
+                      },
+                    ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
                   buildTextField(
                       'Departure City', Icons.flight_takeoff_outlined, (value) {
                     _departureCity = value;
@@ -82,8 +88,8 @@ class _FlightPageState extends State<FlightPage> {
                       },
                       child: CustomButton(
                         text: 'Search',
-                        backgroundColor: tab1,
-                        textColor: whitecolor,
+                        backgroundColor: whitecolor,
+                        textColor: App2,
                         borderRadius: 30.0,
                         onPressed: () {
                           // Trigger form validation
@@ -134,20 +140,20 @@ class _FlightPageState extends State<FlightPage> {
                         // ),
                       )),
                   const SizedBox(height: 10),
-                  if (state is FlightLoaded)
-                    SizedBox(
-                      height: 400, // Example fixed height
-                      child: ListView.builder(
-                        itemCount: state.flightdetails.length,
-                        itemBuilder: (context, index) {
-                          final hotel = state.flightdetails[index];
-                          return FlightItem(flight: hotel);
-                        },
-                      ),
-                    ),
-                  if (state is FlightError) Center(child: Text(state.message)),
-                  if (state is! FlightLoaded && state is! FlightError)
-                    const Center(child: Text('No hotels found')),
+                  // if (state is FlightLoaded)
+                  //   SizedBox(
+                  //     height: 400, // Example fixed height
+                  //     // child: ListView.builder(
+                  //     //   itemCount: state.flightdetails.length,
+                  //     //   itemBuilder: (context, index) {
+                  //     //     final hotel = state.flightdetails[index];
+                  //     //     return FlightItem(flight: hotel);
+                  //     //   },
+                  //     // ),
+                  //   ),
+                  // if (state is FlightError) Center(child: Text(state.message)),
+                  // if (state is! FlightLoaded && state is! FlightError)
+                  //   const Center(child: Text('No hotels found')),
                 ],
               ),
             ),
@@ -160,34 +166,41 @@ class _FlightPageState extends State<FlightPage> {
   Widget buildTextField(
       String label, IconData icon, Function(String) onChanged) {
     return SizedBox(
-      width: 350,
-      height: 45,
-      child: TextFormField(
-        cursorColor: Colors.teal,
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return 'City is required';
-          }
-          if (!RegExp(r'^[A-Z]{3}$').hasMatch(value.trim())) {
-            return 'Enter a valid 3-letter IATA code';
-          }
-          return null;
-        },
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon),
-          labelText: label,
-          labelStyle: const TextStyle(color: Colors.teal),
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+      width: MediaQuery.of(context).size.width * 0.95, // 90% of screen width
+      height: MediaQuery.of(context).size.height * 0.07, // 7% of screen height
+
+      child: Padding(
+        padding: EdgeInsets.only(left: 15.5),
+        child: TextFormField(
+          cursorColor: whitecolor, style: TextStyle(color: whitecolor), //
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'City is required';
+            }
+            if (!RegExp(r'^[A-Z]{3}$').hasMatch(value.trim())) {
+              return 'Enter a valid 3-letter IATA code';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              icon,
+              color: whitecolor,
+            ),
+            labelText: label,
+            labelStyle: const TextStyle(color: whitecolor),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: whitecolor, width: 2.0),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: whitecolor, width: 2.0),
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: whitecolor, width: 2.0),
+            ),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2.0),
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2.0),
-          ),
+          onChanged: onChanged,
         ),
-        onChanged: onChanged,
       ),
     );
   }
@@ -195,47 +208,55 @@ class _FlightPageState extends State<FlightPage> {
   Widget buildDatePicker(String label, TextEditingController controller,
       Function(DateTime?) onChanged) {
     return SizedBox(
-      width: 350,
-      height: 45,
-      child: TextFormField(
-        cursorColor: Colors.teal,
-        controller: controller,
-        readOnly: true,
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return 'Please select a valid $label';
-          }
-          return null;
-        },
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.calendar_today),
-          labelText: label,
-          labelStyle: const TextStyle(color: Colors.teal),
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+      width: MediaQuery.of(context).size.width * 0.95, // 90% of screen width
+      height: MediaQuery.of(context).size.height * 0.07, // 7% of screen height
+
+      child: Padding(
+        padding: EdgeInsets.only(left: 15.5),
+        child: TextFormField(
+          cursorColor: whitecolor,
+          style: TextStyle(color: whitecolor), //
+          controller: controller,
+          readOnly: true,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Please select a valid $label';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            prefixIcon: const Icon(
+              Icons.calendar_today,
+              color: whitecolor,
+            ),
+            labelText: label,
+            labelStyle: const TextStyle(color: whitecolor),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: whitecolor, width: 2.0),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: whitecolor, width: 2.0),
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: whitecolor, width: 2.0),
+            ),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2.0),
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2.0),
-          ),
+          onTap: () async {
+            final DateTime? picked = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(), // Start with today's date
+              firstDate: DateTime.now(), // Disable past dates
+              lastDate: DateTime(2100), // Set the maximum selectable date
+            );
+            if (picked != null) {
+              onChanged(picked);
+              setState(() {
+                controller.text =
+                    '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
+              });
+            }
+          },
         ),
-        onTap: () async {
-          final DateTime? picked = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(), // Start with today's date
-            firstDate: DateTime.now(), // Disable past dates
-            lastDate: DateTime(2100), // Set the maximum selectable date
-          );
-          if (picked != null) {
-            onChanged(picked);
-            setState(() {
-              controller.text =
-                  '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
-            });
-          }
-        },
       ),
     );
   }

@@ -35,14 +35,14 @@ class _TourBoardingState extends State<TourBoarding>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: homebg,
+      backgroundColor: App2,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 100),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Tailored Travel ', style: AppTextStyles.body2),
-            const Text('Packages', style: AppTextStyles.body2),
+            const Text('Tailored Travel ', style: AppTextStyles.body1),
+            const Text('Packages', style: AppTextStyles.body1),
             const SizedBox(height: 70),
             const Text('Discover exclusive travel packages that ',
                 style: AppTextStyles.body3),

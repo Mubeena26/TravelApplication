@@ -46,13 +46,20 @@ class _HotelState extends State<Hotel> {
               key: _formKey,
               child: Column(
                 children: [
-                  Image.asset(
-                    'assets/Hotel-removebg-preview 1.png',
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Text('Image not found');
-                    },
+                  Container(
+                    width: 400,
+                    height: 200, // Set the height to a smaller size
+                    child: Image.asset(
+                      'assets/download__4_-removebg-preview.png',
+                      fit: BoxFit.cover,
+
+                      width: 600,
+                      height: 300, // Set the height to a smaller size
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Text('Image not found');
+                      },
+                    ),
                   ),
-                  const SizedBox(height: 30),
                   _buildTextField(
                     'City, Hotel, Area',
                     Icons.local_hotel,
@@ -147,7 +154,7 @@ class _HotelState extends State<Hotel> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: tab1,
+                        backgroundColor: whitecolor,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 50,
                           vertical: 10,
@@ -156,7 +163,8 @@ class _HotelState extends State<Hotel> {
                           borderRadius: BorderRadius.circular(22),
                         ),
                       ),
-                      child: const Text('Search', style: AppTextStyles.caption),
+                      child:
+                          const Text('Search', style: TextStyle(color: App2)),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -176,20 +184,25 @@ class _HotelState extends State<Hotel> {
     required String? Function(String?) validator,
   }) {
     return SizedBox(
-      width: 350,
-      height: 55,
+      width: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
+      height: MediaQuery.of(context).size.height * 0.07, // 7% of screen height
+
       child: TextFormField(
-        cursorColor: Colors.teal,
+        cursorColor: whitecolor,
+        style: TextStyle(color: whitecolor), //
         decoration: InputDecoration(
-          prefixIcon: Icon(icon),
+          prefixIcon: Icon(
+            icon,
+            color: whitecolor,
+          ),
           labelText: label,
-          labelStyle: const TextStyle(color: Colors.teal),
+          labelStyle: const TextStyle(color: whitecolor),
           border: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.teal, width: 2.0)),
+              borderSide: BorderSide(color: whitecolor, width: 2.0)),
           focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.teal, width: 2.0)),
+              borderSide: BorderSide(color: whitecolor, width: 2.0)),
           enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.teal, width: 2.0)),
+              borderSide: BorderSide(color: whitecolor, width: 2.0)),
         ),
         onChanged: onChanged,
         validator: validator,
@@ -204,22 +217,28 @@ class _HotelState extends State<Hotel> {
     required String? Function(String?) validator,
   }) {
     return SizedBox(
-      width: 350,
-      height: 55,
+      width: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
+      height: MediaQuery.of(context).size.height * 0.07, // 7% of screen height
+
       child: TextFormField(
         controller: controller,
-        cursorColor: Colors.teal,
+        cursorColor: whitecolor, // This changes the cursor color to white
+        style: TextStyle(color: whitecolor), //
+
         readOnly: true,
         decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.calendar_today),
+          prefixIcon: const Icon(
+            Icons.calendar_today,
+            color: whitecolor,
+          ),
           labelText: label,
-          labelStyle: const TextStyle(color: Colors.teal),
+          labelStyle: const TextStyle(color: whitecolor),
           border: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.teal, width: 2.0)),
+              borderSide: BorderSide(color: whitecolor, width: 2.0)),
           focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.teal, width: 2.0)),
+              borderSide: BorderSide(color: whitecolor, width: 2.0)),
           enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.teal, width: 2.0)),
+              borderSide: BorderSide(color: whitecolor, width: 2.0)),
         ),
         validator: validator,
         onTap: () async {

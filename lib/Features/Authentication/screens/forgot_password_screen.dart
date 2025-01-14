@@ -48,22 +48,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [board1, board2, board3],
+                colors: [App2, App2, App2],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 stops: [0.5, 0.8, 1],
               ),
             ),
           ),
-          Positioned(
-            top: 70,
-            left: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/10476-[Converted] 2.png',
-              fit: BoxFit.contain,
-            ),
-          ),
+          // Positioned(
+          //   top: 70,
+          //   left: 0,
+          //   right: 0,
+          //   child: Image.asset(
+          //     'assets/10476-[Converted] 2.png',
+          //     fit: BoxFit.contain,
+          //   ),
+          // ),
           Positioned(
             top: 430,
             left: 20,
@@ -83,7 +83,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     const Text(
                       'Forgot Password',
                       style: TextStyle(
-                        color: blackcolor,
+                        color: App2,
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
                       ),
@@ -103,14 +103,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       child: ElevatedButton(
                         onPressed: _sendResetEmail,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: tab1,
+                          backgroundColor: App2,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 10),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(22),
                           ),
                         ),
-                        child: const Text('Send Reset Email'),
+                        child: const Text(
+                          'Send Reset Email',
+                          style: TextStyle(color: whitecolor),
+                        ),
                       ),
                     ),
                   ],

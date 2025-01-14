@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travelapp_project/Features/Authentication/screens/auth_three.dart';
 
 import 'package:travelapp_project/Features/Authentication/screens/login_screen.dart';
 import 'package:travelapp_project/Features/Home/bloc/tab_bloc.dart';
@@ -20,15 +21,14 @@ class HomeScreen extends StatelessWidget {
     final tabBloc = BlocProvider.of<TabBloc>(context);
 
     return Scaffold(
-      backgroundColor: homebg,
-      appBar: CustomAppBar(
-        title: "Le'xplore",
-        style: AppTextStyles.home,
-        backgroundColor: home,
-        toolbarHeight: 60,
-        titleSpacing: 10,
+      backgroundColor: App2,
+      appBar: AppBar(
+        title: Text("Le'xplore", style: AppTextStyles.headline1),
+        backgroundColor: App2, // Check if App2 color works here
+        elevation: 0,
         automaticallyImplyLeading: false,
         leading: IconButton(
+          color: whitecolor,
           onPressed: () {
             showDialog(
               context: context,
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                       FirebaseAuth.instance.signOut();
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
+                          builder: (context) => AuthThreePage(),
                         ),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,33 +61,35 @@ class HomeScreen extends StatelessWidget {
           icon: const Icon(Icons.logout),
         ),
       ),
-      body: BlocBuilder<TabBloc, TabState>(
-        builder: (context, state) {
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildTabButton(context, 0, 'Tour', state.selectedIndex),
-                  const SizedBox(width: 20),
-                  _buildTabButton(context, 1, 'Hotel', state.selectedIndex),
-                  const SizedBox(width: 20),
-                  _buildTabButton(context, 2, 'Flight', state.selectedIndex),
-                ],
-              ),
-              Expanded(
-                child: IndexedStack(
-                  index: state.selectedIndex,
+      body: SafeArea(
+        child: BlocBuilder<TabBloc, TabState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const TourScreen(),
-                    Hotel(),
-                    const FlightPage(),
+                    _buildTabButton(context, 0, 'Tour', state.selectedIndex),
+                    const SizedBox(width: 20),
+                    _buildTabButton(context, 1, 'Hotel', state.selectedIndex),
+                    const SizedBox(width: 20),
+                    _buildTabButton(context, 2, 'Flight', state.selectedIndex),
                   ],
                 ),
-              ),
-            ],
-          );
-        },
+                Expanded(
+                  child: IndexedStack(
+                    index: state.selectedIndex,
+                    children: [
+                      const TourScreen(),
+                      Hotel(),
+                      const FlightPage(),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -102,15 +104,22 @@ class HomeScreen extends StatelessWidget {
           BlocProvider.of<TabBloc>(context).add(ChangeTab(index));
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected ? tab1 : tab2,
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          backgroundColor: isSelected ? whitecolor : App2,
+          padding: EdgeInsets.symmetric(
+            horizontal:
+                MediaQuery.of(context).size.width * 0.08, // 8% of screen width
+            vertical: MediaQuery.of(context).size.height *
+                0.01, // 1% of screen height
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(22),
           ),
         ),
         child: Text(
           title,
-          style: const TextStyle(color: lightPrimary),
+          style: TextStyle(
+            color: isSelected ? App2 : whitecolor, // Black for selected tab
+          ),
         ),
       ),
     );

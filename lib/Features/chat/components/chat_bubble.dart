@@ -18,7 +18,7 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime date = timestamp.toDate();
-    String formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(date);
+    String formattedDate = DateFormat('dd MMM , hh:mm a').format(date);
     return Container(
       margin: isSentByMe
           ? const EdgeInsets.only(left: 50, top: 10, bottom: 10, right: 10)
@@ -27,7 +27,7 @@ class ChatBubble extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: isSentByMe
             ? LinearGradient(
-                colors: [chatgradient, chatgradient2],
+                colors: [App4, App2],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
@@ -35,8 +35,7 @@ class ChatBubble extends StatelessWidget {
                 colors: [
                   // Colors.teal.shade700,
                   // Colors.teal.shade300,
-                  chatgradient2,
-                  chatgradient
+                  App2, App4
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,

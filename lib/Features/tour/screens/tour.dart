@@ -21,7 +21,7 @@ class _TourScreenState extends State<TourScreen> {
       create: (_) =>
           TourBloc()..add(FetchToursEvent()), // Initialize and fetch data
       child: Scaffold(
-        backgroundColor: homebg,
+        backgroundColor: App2,
         resizeToAvoidBottomInset: true,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
@@ -31,7 +31,7 @@ class _TourScreenState extends State<TourScreen> {
                 // Search TextField
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 1.0),
+                      horizontal: 10.0, vertical: 1.0),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -53,8 +53,7 @@ class _TourScreenState extends State<TourScreen> {
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
                               'Tour package', // Add text or content you need
-                              style:
-                                  TextStyle(fontSize: 16, color: lightPrimary),
+                              style: TextStyle(fontSize: 16, color: App2),
                             ),
                           ),
                           IconButton(
@@ -63,7 +62,7 @@ class _TourScreenState extends State<TourScreen> {
                             },
                             icon: Icon(
                               Icons.search,
-                              color: lightPrimary,
+                              color: App2,
                             ),
                           )
                         ],
@@ -71,7 +70,7 @@ class _TourScreenState extends State<TourScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
 
                 // Horizontal List of Tours
                 SizedBox(
@@ -106,7 +105,7 @@ class _TourScreenState extends State<TourScreen> {
                             }
                             return Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                                  const EdgeInsets.symmetric(horizontal: 1.0),
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -120,44 +119,45 @@ class _TourScreenState extends State<TourScreen> {
                                   width: 233,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: whitecolor,
+                                    color: App2,
                                   ),
                                   child: Column(
                                     children: [
                                       Container(
-                                          width: 208,
-                                          height: 157,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(40),
-                                            color: whitecolor,
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: firstImageUrl != null
-                                                ? Image.network(
-                                                    firstImageUrl,
-                                                    filterQuality:
-                                                        FilterQuality.high,
-                                                    fit: BoxFit.cover,
-                                                    width: double.infinity,
-                                                    height: 500,
-                                                    errorBuilder: (context,
-                                                        error, stackTrace) {
-                                                      return const Icon(
-                                                        Icons.broken_image,
-                                                        size: 100,
-                                                        color: grey,
-                                                      );
-                                                    },
-                                                  )
-                                                : const Icon(
-                                                    Icons.image_not_supported,
-                                                    size: 100,
-                                                    color: grey,
-                                                  ),
-                                          )),
+                                        width: 208,
+                                        height: 157,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          color: whitecolor,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          child: firstImageUrl != null
+                                              ? Image.network(
+                                                  firstImageUrl,
+                                                  filterQuality:
+                                                      FilterQuality.high,
+                                                  fit: BoxFit.cover,
+                                                  width: double.infinity,
+                                                  height: 500,
+                                                  errorBuilder: (context, error,
+                                                      stackTrace) {
+                                                    return const Icon(
+                                                      Icons.broken_image,
+                                                      size: 100,
+                                                      color: App2,
+                                                    );
+                                                  },
+                                                )
+                                              : const Icon(
+                                                  Icons.image_not_supported,
+                                                  size: 100,
+                                                  color: grey,
+                                                ),
+                                        ),
+                                      ),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -174,16 +174,17 @@ class _TourScreenState extends State<TourScreen> {
                                                       'Unknown Package',
                                                   style: const TextStyle(
                                                       fontSize: 18,
+                                                      fontFamily: 'icomoon',
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      color: lightPrimary),
+                                                      color: whitecolor),
                                                 ),
                                                 Text(
                                                   data['destination'] ??
                                                       'Unknown Location',
                                                   style: const TextStyle(
                                                       fontSize: 12,
-                                                      color: lightPrimary),
+                                                      color: whitecolor),
                                                 ),
                                               ],
                                             ),
@@ -211,9 +212,9 @@ class _TourScreenState extends State<TourScreen> {
                       Text(
                         'Popular',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
-                          color: lightPrimary,
+                          color: whitecolor,
                         ),
                       ),
                     ],
@@ -253,19 +254,19 @@ class _TourScreenState extends State<TourScreen> {
                                   child: Text('Image path not available.'));
                             }
                             return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 11),
                               child: Container(
                                 width: 331,
                                 height: 70,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: whitecolor,
+                                  color: App3,
                                 ),
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 10),
+                                      padding: const EdgeInsets.only(left: 15),
                                       child: GestureDetector(
                                         onTap: () {
                                           Navigator.of(context)
@@ -282,18 +283,22 @@ class _TourScreenState extends State<TourScreen> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: bluetheme2,
+                                            color: App2,
                                           ),
-                                          child: firstImageUrl != null
-                                              ? Image.network(
-                                                  firstImageUrl,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : const Icon(
-                                                  Icons.image_not_supported,
-                                                  size: 50,
-                                                  color: grey,
-                                                ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: firstImageUrl != null
+                                                ? Image.network(
+                                                    firstImageUrl,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : const Icon(
+                                                    Icons.image_not_supported,
+                                                    size: 50,
+                                                    color: grey,
+                                                  ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -304,9 +309,10 @@ class _TourScreenState extends State<TourScreen> {
                                           data['packageName'] ??
                                               'Unknown Package',
                                           style: const TextStyle(
-                                              fontWeight: FontWeight.w400,
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 18,
-                                              color: lightPrimary),
+                                              fontFamily: 'icomoon',
+                                              color: whitecolor),
                                         ),
                                         subtitle: Text(
                                           data['destination'] ??
@@ -314,7 +320,7 @@ class _TourScreenState extends State<TourScreen> {
                                           style: const TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.normal,
-                                              color: lightPrimary),
+                                              color: whitecolor),
                                         ),
                                       ),
                                     ),
